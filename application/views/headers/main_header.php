@@ -53,12 +53,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+    <nav class="navbar navbar-inverse navbar-static-top hidden-sm-down" role="navigation">
         <div class="container-fluid">
           <div class="navbar-header">
             <a class="navbar-brand" href="#">FoW Card-Trade</a>
           </div>
           <ul class="nav navbar-nav">
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Lenguage
+                <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">English</a></li>
+                  <li><a href="#">Spanish</a></li>
+                  <li><a href="#">Italian</a></li>
+                </ul>
+              </li>
             <li class="active"><a href="#">Home</a></li>
             <li><a href="#">Page 1</a></li>
             <li><a href="#">Page 2</a></li>
@@ -69,6 +78,37 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           </ul>
         </div>
     </nav>
+    <!-- SMALL SIZE -->
+    <div class="hidden-xs-down">
+        <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
+            <div class="container-fluid">
+              <div class="navbar-header">
+                <a class="navbar-brand" href="#">FoW Card-Trade</a>
+              </div>
+              <ul class="nav navbar-nav">
+                  <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Lenguage
+                    <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="#">English</a></li>
+                      <li><a href="#">Spanish</a></li>
+                      <li><a href="#">Italian</a></li>
+                    </ul>
+                  </li>
+                  <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Home
+                    <span class="caret"></span></a>
+                    <ul class="dropdown-menu">
+                      <li><a href="#">Page 1</a></li>
+                      <li><a href="#">Page 2</a></li>
+                      <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                      <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                    </ul>
+                  </li>
+              </ul>
+            </div>
+        </nav>
+    </div>
 
         <dib class="container">
             <div class="row-fluid">

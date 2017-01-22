@@ -11,7 +11,7 @@
 
 
 <div id="container">
-        <div id="body">
+        <div id="body hidden-xs-down">
                 <p>This is some text.</p>
                 <p>This is another text.</p>
         </div>
