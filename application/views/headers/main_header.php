@@ -27,7 +27,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
         </script>
 
-	<title>Welcome to CodeIgniter</title>
+	<title>FoW</title>
         
         <style>
             footer .list-group-item{
@@ -48,12 +48,29 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                         color:white;
                        height:auto;
                         }
+      .red
+      {
+        color: white;
+        background-color: red;
+      }
+
+      .green
+      {
+        color: white;
+        background-color: green;
+      }
+
+      .blue
+      {
+        color: white;
+        background-color: blue;
+      }
         </style>
 
 	
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-static-top hidden-sm-down" role="navigation">
+    <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
         <div class="container-fluid">
           <div class="navbar-header">
             <a class="navbar-brand" href="#">FoW Card-Trade</a>
@@ -78,55 +95,23 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           </ul>
         </div>
     </nav>
-    <!-- SMALL SIZE -->
-    <div class="hidden-xs-down">
-        <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-            <div class="container-fluid">
-              <div class="navbar-header">
-                <a class="navbar-brand" href="#">FoW Card-Trade</a>
-              </div>
-              <ul class="nav navbar-nav">
-                  <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Lenguage
-                    <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                      <li><img src="../application/resources/images/card_foil.png" alt=""/></li>
-                      <li><a href="#">Spanish</a></li>
-                      <li><a href="#">Italian</a></li>
-                    </ul>
-                  </li>
-                  <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">Home
-                    <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                      <li><a href="#">Page 1</a></li>
-                      <li><a href="#">Page 2</a></li>
-                      <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                      <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-                    </ul>
-                  </li>
-              </ul>
-            </div>
-        </nav>
-    </div>
 
-        <dib class="container">
-            <div class="row-fluid">
-                <div clas="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <h1>FoW Card-Trade</h1>
-                </div>
-                <div clas="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                    <form>
-                        <div class="input-group col-xs-4">
-                            <input type="text" class="form-control input-lg" placeholder="Search">
-                            <div class="input-group-btn">
-                                <button class="btn btn-default input-lg" type="submit">
-                                  <i class="glyphicon glyphicon-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
+    <dib class="container">
+        <div class="row-fluid">
+            <div clas="col-lg-6 col-md-6 col-sm-6 col-xs-12 hide-xs-down">
+                <h1>FoW Card-Trade</h1>
             </div>
-        </dib>
- 
+            <div clas="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                <form>
+                    <div class="input-group col-xs-4">
+                        <input type="text" class="form-control input-lg" placeholder="Search">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default input-lg" type="submit">
+                              <i class="glyphicon glyphicon-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </dib>
