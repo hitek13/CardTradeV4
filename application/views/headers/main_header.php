@@ -90,7 +90,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#">Lenguage
                     <span class="caret"></span></a>
                     <ul class="dropdown-menu">
-                      <li><a href="#">English</a></li>
+                      <li><img src="../application/resources/images/card_foil.png" alt=""/></li>
                       <li><a href="#">Spanish</a></li>
                       <li><a href="#">Italian</a></li>
                     </ul>
