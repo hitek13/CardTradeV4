@@ -7,3 +7,44 @@ and open the template in the editor.
     Created on : 23-ene-2017, 18:16:44
     Author     : miguel
 */
+
+footer .list-group-item{
+                border:0;
+                background:transparent;
+                }
+
+div.visible-xs-block
+{
+        background:maroon;
+        color:white;
+        font-family:"Tahoma" serif;
+        padding:1em;
+    }
+
+footer{
+    position: absolute;
+    bottom: 0;
+    background:#555;
+    color:white;
+    height:auto;
+    width: 100%;
+    
+    
+    }
+      .red
+      {
+        color: white;
+        background-color: red;
+      }
+
+      .green
+      {
+        color: white;
+        background-color: green;
+      }
+
+      .blue
+      {
+        color: white;
+        background-color: blue;
+      }

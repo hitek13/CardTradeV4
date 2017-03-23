@@ -26,45 +26,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" 
             integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
         </script>
-
+        
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>application/resources/css/stylesHeader.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>application/resources/css/stylesFoot.css">
 	<title>FoW</title>
         
         <style>
-            footer .list-group-item{
-                border:0;
-                background:transparent;
-                }
-
-                div.visible-xs-block
-                {
-                        background:maroon;
-                        color:white;
-                        font-family:"Tahoma" serif;
-                        padding:1em;
-                    }
-
-                    footer{
-                        background:#555;
-                        color:white;
-                       height:auto;
-                        }
-      .red
-      {
-        color: white;
-        background-color: red;
-      }
-
-      .green
-      {
-        color: white;
-        background-color: green;
-      }
-
-      .blue
-      {
-        color: white;
-        background-color: blue;
-      }
+            
         </style>
 
 	
@@ -80,9 +48,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Lenguage
                 <span class="caret"></span></a>
                 <ul class="dropdown-menu">
-                  <li><a href="#">English</a></li>
-                  <li><a href="#">Spanish</a></li>
-                  <li><a href="#">Italian</a></li>
+                  <li><a href="#">
+                          <img src="<?php echo base_url(); ?>application/resources/flag/Espana.png" 
+                               height="16px" />
+                          Spanish</a></li>
+                  <li><a href="#">
+                          <img src="<?php echo base_url(); ?>application/resources/flag/italy_flag_128.png"
+                               height="16px"/>
+                          Italian</a></li>
+                  <li><a href="#">
+                          <img src="<?php echo base_url(); ?>application/resources/flag/united_kingdom_flags_flag_17079.png"
+                               height="16px"/>
+                          English</a></li>
                 </ul>
               </li>
             <li class="active"><a href="#">Home</a></li>
@@ -95,23 +72,47 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           </ul>
         </div>
     </nav>
-
-    <dib class="container">
-        <div class="row-fluid">
-            <div clas="col-lg-6 col-md-6 col-sm-6 col-xs-12 hide-xs-down">
-                <h1>FoW Card-Trade</h1>
-            </div>
-            <div clas="col-lg-6 col-md-6 col-sm-6 col-xs-12">
-                <form>
-                    <div class="input-group col-xs-4">
-                        <input type="text" class="form-control input-lg" placeholder="Search">
-                        <div class="input-group-btn">
-                            <button class="btn btn-default input-lg" type="submit">
-                              <i class="glyphicon glyphicon-search"></i>
-                            </button>
+    <!-- ||||||||||||||||||||||||| Search bar
+        http://bootsnipp.com/snippets/featured/advanced-dropdown-search |||||||||||||||||||||||| -->
+    <div class="container">
+	<div class="row">
+		<div class="col-md-12">
+            <div class="input-group" id="adv-search">
+                <input type="text" class="form-control" placeholder="Search for snippets" />
+                <div class="input-group-btn">
+                    <div class="btn-group" role="group">
+                        <div class="dropdown dropdown-lg">
+                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                            <div class="dropdown-menu dropdown-menu-right" role="menu">
+                                <form class="form-horizontal" role="form">
+                                  <div class="form-group">
+                                    <label for="filter">Filter by</label>
+                                    <select class="form-control">
+                                        <option value="0" selected>All Snippets</option>
+                                        <option value="1">Featured</option>
+                                        <option value="2">Most popular</option>
+                                        <option value="3">Top rated</option>
+                                        <option value="4">Most commented</option>
+                                    </select>
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="contain">Author</label>
+                                    <input class="form-control" type="text" />
+                                  </div>
+                                  <div class="form-group">
+                                    <label for="contain">Contains the words</label>
+                                    <input class="form-control" type="text" />
+                                  </div>
+                                  <button type="submit" class="btn navbar-inverse" style="color:#FFF;"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
+                                </form>
+                            </div>
                         </div>
+                        <button type="button" class="btn navbar-inverse" style="color:#FFF;"><span class="glyphicon glyphicon-search" aria-hidden="true"></span></button>
                     </div>
-                </form>
+                </div>
             </div>
+          </div>
         </div>
-    </dib>
+	</div>
+    
+    <!-- ||||||||||||||||||||||||||||||||||||||||||||||||| -->
