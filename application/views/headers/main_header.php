@@ -38,8 +38,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 	
 </head>
 <body>
-    <nav class="navbar navbar-inverse navbar-static-top" role="navigation">
-        <div class="container-fluid">
+        <!-- ||||||||||||||||||||||||| Menu Bar BIG |||||||||||||||||||||||| -->
+    <nav class="navbar navbar-inverse navbar-static-top hidden-xs" role="navigation">
+        <div class="container-fluidc">
           <div class="navbar-header">
             <a class="navbar-brand" href="#">FoW Card-Trade</a>
           </div>
@@ -72,17 +73,63 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           </ul>
         </div>
     </nav>
+    
+    <!-- ||||||||||||||||||||||||| Menu Bar small |||||||||||||||||||||||| -->
+    
+    <nav class="navbar navbar-inverse navbar-static-top visible-xs" role="navigation">
+        <div class="container-fluidc">
+            <ul class="nav navbar-nav">
+
+            <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                    <h3 align="center">FoW Card-Trade<span class="caret"></span></h3></a>
+                <ul class="dropdown-menu">
+                    <li class="active"><a href="#">Home</a></li>
+                    <li><a href="#">Page 1</a></li>
+                    <li><a href="#">Page 2</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+                    <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+                </ul>
+              </li>
+            
+              <li class="dropdown">
+                <a class="dropdown-toggle" data-toggle="dropdown" href="#">Lenguage
+                <span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                  <li><a href="#">
+                          <img src="<?php echo base_url(); ?>application/resources/flag/Espana.png" 
+                               height="16px" />
+                          Spanish</a></li>
+                  <li><a href="#">
+                          <img src="<?php echo base_url(); ?>application/resources/flag/italy_flag_128.png"
+                               height="16px"/>
+                          Italian</a></li>
+                  <li><a href="#">
+                          <img src="<?php echo base_url(); ?>application/resources/flag/united_kingdom_flags_flag_17079.png"
+                               height="16px"/>
+                          English</a></li>
+                </ul>
+              </li>
+            
+          </ul>
+          
+        </div>
+    </nav>
     <!-- ||||||||||||||||||||||||| Search bar
         http://bootsnipp.com/snippets/featured/advanced-dropdown-search |||||||||||||||||||||||| -->
-    <div class="container">
+    <div class="container" style="margin-top: 0px">
 	<div class="row">
-		<div class="col-md-12">
+            
+        <div class="col-md-12">
+            <img src="<?php echo base_url(); ?>application/resources/images/forceofwill.png" 
+                  class="img-responsive logoFoW"/>
+                    
             <div class="input-group" id="adv-search">
-                <input type="text" class="form-control" placeholder="Search for snippets" />
+                <input type="text" class="form-control input-lg" placeholder="Buscar cartas" />
                 <div class="input-group-btn">
                     <div class="btn-group" role="group">
                         <div class="dropdown dropdown-lg">
-                            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
+                            <button type="button" class="btn btn-default dropdown-toggle btn-lg" data-toggle="dropdown" aria-expanded="false"><span class="caret"></span></button>
                             <div class="dropdown-menu dropdown-menu-right" role="menu">
                                 <form class="form-horizontal" role="form">
                                   <div class="form-group">

@@ -15,9 +15,16 @@ body {
 body {
     width: 100%;
     height: 100%;
-    background-image: url("../images/FoW.jpg");
-    background-repeat:no-repeat;
+    background-image: url("../images/FoWfondo.jpg");
     background-size: 100%;
+    background-position: center;
+    
+}
+
+.logoFoW {
+    display: block;
+    margin: auto;
+    height: auto;
     
 }
 
