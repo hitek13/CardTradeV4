@@ -9,4 +9,15 @@ class Main extends CI_Controller {
 		$this->load->view('main');
                 $this->load->view('footers/main_footer');
 	}
+        public function busqueda()
+	{
+                $this->load->view('headers/main_header');
+		$this->load->view('busqueda');
+                $this->load->view('footers/main_footer');
+	}
+        public function introducirCarta()
+        {
+            $this->load->model('Buscar_model');
+            echo json_encode($this->Buscar_model->buscarCartas());
+        }
 }

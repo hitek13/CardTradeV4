@@ -12,12 +12,15 @@ body {
     padding-top: 50px;
 }*/
 
+.navbar {
+    size: 50%;
+}
+
 body {
     width: 100%;
     height: 100%;
-    background-image: url("../images/FoWfondo.jpg");
+    background-image: url("../images/fondo_poco_opaco.png");
     background-size: 100%;
-    background-position: center;
     
 }
 
