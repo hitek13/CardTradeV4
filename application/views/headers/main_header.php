@@ -23,23 +23,67 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
          
             <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+        $(document).ready(function(){
+            if( !localStorage.id ){
+                noSessionUL = "<li><a href='<?php echo site_url('Main/sign_up') ?>'><span class='glyphicon glyphicon-user'></span> Sign Up</a></li> <li><input class='input-xs' type='text' id='user' placeholder='User' size='10'>&nbsp;</li> <li><input class='input-xs' type='password' id='pass' placeholder='Pass' size='10'></li> <li id='login'><a href='#'><span class='glyphicon glyphicon-log-in'></span></a></li>";
+                noSessionULmovil = "<li><a href='<?php echo site_url('Main/sign_up') ?>'><span class='glyphicon glyphicon-user'></span> Sign Up</a></li> <li><a href='<?php echo site_url('Main/log_in') ?>'><span class='glyphicon glyphicon-log-in'></span> Login</a></li>";
+                $('#sessionUL').append(noSessionUL);
+                $('#sessionULmovil').append(noSessionULmovil);
+            }else{
+                sessionUL = "<li><a href='<?php echo site_url('Main/perfil') ?>'>"+localStorage.Nick+" <span class='glyphicon glyphicon-user'></span>  </a></li> <li id='logout'><a href='#'>Log Out <span class='glyphicon glyphicon-log-out'></span></a></li>";
+                sessionULmovil = "<li><a href='<?php echo site_url('Main/perfil') ?>'>"+localStorage.Nick+" <span class='glyphicon glyphicon-user'></span>  </a></li> <li id='logoutMovil'><a href='#'> Log Out <span class='glyphicon glyphicon-log-out'></span></a></li>";
+                $('#sessionUL').append(sessionUL);
+                $('#sessionULmovil').append(sessionULmovil);
+            }
+            $('#login').on('click', function(){
+                var parametros = {
+                    'Nick': $('#user').val(),
+                    'Pass': $('#pass').val()
+                };
+                $.ajax({
+                    data: parametros,
+                    type: "POST",
+                    url: '<?php echo site_url("Users/logIn")?>', // Forma correcta de llamar al controlador
+                    dataType: 'json',
+                    success: function(result){
+                        if(result == 'No existe el usuario, o la contraseña es erronea') {
+                            alert(result);
+                        }
+                        else {
+                            //alert(result);
+                            localStorage.setItem("id", result);
+                            localStorage.setItem("Nick", $('#user').val());
+                            $(location).attr('href', '<?php echo site_url('Main') ?>')
+                        }
+                    },
+                    error: function(result){
+                        console.log(result);
+                        alert('Error'+result);
+                    }
+                });
+            });
+            $('#logout, #logoutMovil').on('click',function(){
+               //alert(" Hola");
+                localStorage.removeItem('id');
+                localStorage.removeItem('Nick');
+                $(location).attr('href', '<?php echo site_url('Main') ?>')
+            });
+        });
+    </script>
         
         <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>application/resources/css/stylesHeader.css">
         <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>application/resources/css/stylesFoot.css">
+        <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>application/resources/css/stylesMain.css">
 	<title>FoW</title>
-        
-        <style>
-            
-        </style>
-
 	
 </head>
 <body>
         <!-- ||||||||||||||||||||||||| Menu Bar BIG |||||||||||||||||||||||| -->
     <nav class="navbar navbar-inverse navbar-static-top hidden-xs" role="navigation">
-        <div class="container-fluidc">
+        <div class="container-fluid">
           <div class="navbar-header">
-            <a class="navbar-brand" href="#">FoW Card-Trade</a>
+            <a class="navbar-brand" href="<?php echo site_url('Main') ?>">FoW Card-Trade</a>
           </div>
           <ul class="nav navbar-nav">
               <li class="dropdown">
@@ -47,7 +91,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <span class="caret"></span></a>
                 <ul class="dropdown-menu">
                   <li><a href="#">
-                          <img src="<?php echo base_url(); ?>application/resources/flag/Espana.png" 
+                          <img src="<?php echo base_url(); ?>application/resources/flag/Espana.png"
                                height="16px" />
                           Spanish</a></li>
                   <li><a href="#">
@@ -62,11 +106,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               </li>
             <li class="active"><a href="#">Home</a></li>
             <li><a href="#">Page 1</a></li>
-            <li><a href="#">Page 2</a></li>
           </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-            <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+          <ul class="nav navbar-nav navbar-right" id="sessionUL">
+           <!-- <li><a href="<?php /*echo site_url('Main/sign_up') */?>"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+            <li><input class="input-xs" type="text" id="user" placeholder="User" size="10">&nbsp;</li>
+            <li><input class="input-xs" type="password" id="pass" placeholder="Pass" size="10"></li>
+            <li id="login"><a href="#"><span class="glyphicon glyphicon-log-in"></span></a></li>-->
+
+<!--            <li><a href="--><?php //echo site_url('Main/sign_up') ?><!--">Nombre <span class="glyphicon glyphicon-user"></span>  </a></li>-->
+<!--            <li id="logout"><a href="#"><span class="glyphicon glyphicon-log-out"></span></a></li>-->
           </ul>
         </div>
     </nav>
@@ -74,21 +122,21 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <!-- ||||||||||||||||||||||||| Menu Bar small |||||||||||||||||||||||| -->
     
     <nav class="navbar navbar-inverse navbar-static-top visible-xs" role="navigation">
-        <div class="container-fluidc">
+        <div class="container-fluid">
             <ul class="nav navbar-nav">
-
             <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                    <h3 align="center">FoW Card-Trade<span class="caret"></span></h3></a>
-                <ul class="dropdown-menu">
-                    <li class="active"><a href="#">Home</a></li>
+                    <img src="<?php echo base_url(); ?>application/resources/images/forceofwill.png"
+                         class="img-responsive logoFoW2"/>
+                </a>
+                <ul class="dropdown-menu" id="sessionULmovil">
+                    <li><a href="<?php echo site_url('Main') ?>">Home</a></li>
                     <li><a href="#">Page 1</a></li>
                     <li><a href="#">Page 2</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
-                    <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+<!--                    <li><a href="--><?php //echo site_url('Main/sign_up') ?><!--"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>-->
+<!--                    <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>-->
                 </ul>
               </li>
-            
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Lenguage
                 <span class="caret"></span></a>
@@ -107,8 +155,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                           English</a></li>
                 </ul>
               </li>
-            
           </ul>
-          
         </div>
     </nav>
+
+<!--        --><?//
+//    if( isset($_SESSION['Nick']) )
+//        echo '<button  id="btn_storage">pulsa</button>';
+//    else
+//        echo $this->session->$_SESSION['Nick'];
+//    ?>

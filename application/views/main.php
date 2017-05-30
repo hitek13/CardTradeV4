@@ -5,7 +5,7 @@
             
         <div class="col-md-12">
             <img src="<?php echo base_url(); ?>application/resources/images/forceofwill.png" 
-                  class="img-responsive logoFoW"/>
+                  class="img-responsive hidden-xs logoFoW"/>
                     
             <div class="input-group" id="adv-search">
                 <input type="text" class="form-control input-lg" placeholder="Buscar cartas" />
@@ -47,8 +47,21 @@
     
     <!-- ||||||||||||||||||||||||||||||||||||||||||||||||| -->
 
-<a href="<?php echo site_url('Main/busqueda') ?>">
-    <h1>
-        Link
-    </h1>
-</a>
+<br>
+<br>
+<br>
+<!--
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-4">
+            <div class="card">
+                <img src="<?php //echo base_url(); ?>application/resources/images/img_avatar2.png" alt="Avatar" style="width:100%">
+                <div class="container">
+                    <h4><b>Jane Doe</b></h4><br>
+                    <p>Interior Designer</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+-->

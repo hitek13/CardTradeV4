@@ -13,24 +13,21 @@
  */
 
 // SUPER IMPORTNATE, PRIMERO MAYUSCULA, EL RESTO EN MINÚSCULA
-
 class Buscar_model  extends CI_Model {
     //put your code here
     public function __construct()
         {
             parent::__construct();
+            //$this->load->database(); // ¿? necesario
         }
         
     public function buscarCartas(){
 
-        $this -> db -> select('Card');
-        $this -> db -> from('Cards');
-        $query = $this -> db ->get(); 
+        $query = $this->db->query("SELECT * FROM clientes");
 
-        return $query -> result_array();
-    }
-    public function introducirCarta(){
-        $query = $this->db->query('INSERT INTO Cards (Card, Edition) VALUES ("Chapolina Colorada", "5678")');
-        return $query->result_array();
+        foreach ($query->result_array() as $row)
+        {
+            return $row['Nombre'];
+        }
     }
 }

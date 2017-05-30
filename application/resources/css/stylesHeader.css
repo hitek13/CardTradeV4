@@ -12,10 +12,22 @@ body {
     padding-top: 50px;
 }*/
 
-.navbar {
-    size: 50%;
+.navbar-right > li:last-child {
+    /*size: 50%;*/
+    margin-right: 15px;
 }
+.input-xs {
+    height: 22px;
+    padding: 2px 5px;
+    font-size: 12px;
+    line-height: 1.5; /* If Placeholder of the input is moved up, rem/modify this. */
+    border-radius: 3px;
+    margin-top: 15px;
+    background-color: darkgray;
+}
+.navbar{
 
+     }
 body {
     width: 100%;
     height: 100%;
@@ -29,6 +41,12 @@ body {
     margin: auto;
     height: auto;
     
+}
+.logoFoW2 {
+    display: block;
+    margin: auto;
+    height: 75px;
+
 }
 
 .dropdown.dropdown-lg .dropdown-menu {
