@@ -46,6 +46,55 @@
         $('#mensajes').on('click', function(){ 
             cargar_msg(localStorage.id);
         });
+        /*||||||||||*/
+        $('section h4').click(function(event) {
+            event.preventDefault();
+            $(this).addClass('active');
+            $(this).siblings().removeClass('active');
+
+            var ph = $(this).parent().height();
+            var ch = $(this).next().height();
+
+            if (ch > ph) {
+                $(this).parent().css({
+                    'min-height': ch + 'px'
+                });
+            } else {
+                $(this).parent().css({
+                    'height': 'auto'
+                });
+            }
+        });
+
+        function tabParentHeight() {
+            var ph = $('section').height();
+            var ch = $('section ul').height();
+            if (ch > ph) {
+                $('section').css({
+                    'height': ch + 'px'
+                });
+            } else {
+                $(this).parent().css({
+                    'height': 'auto'
+                });
+            }
+        }
+
+        $(window).resize(function() {
+            tabParentHeight();
+        });
+
+        $(document).resize(function() {
+            tabParentHeight();
+        });
+        tabParentHeight();
+        /*||||||||||*/
+        $('#btn1234').on('click', function(){
+            if($('#text1234').val()) {
+                $(mensajeAzul('12/12/1222', $('#text1234').val())).insertBefore('#text1234');
+                $('#text1234').val('')
+            }
+        });
     });
     function colocar(Email, Nombre, Apellidos, DNI, Direccion, Ciudad, Pais, FechaNac, Saldo, Valoracion){
         $('#spanSaldo').html(Saldo+" <span class='glyphicon glyphicon-eur' style='font-size: 65%;'></span>");
@@ -58,15 +107,23 @@
         $('#spanFecNac').html(FechaNac);
         $('#spanDireccion').html(Direccion+'<br>'+Ciudad+'<br>'+Pais);
     }
-    function cargar_msg(idUser){
-        alert('Llega '+ idUser);
+    function mensajeVerde(nick, fecha, texto){
+        cabeza = "<div class='media'> <a class='media-left' href='#'> <div class = 'rounded'> <span class='glyphicon glyphicon-user' style='font-size: 200%;'></span>";
+        cuerpo = "</div> </a> <div class='media-body mensaje-B'> <div>";
+        pie = " </div> </div> </div>";
+        return cabeza+nick+cuerpo+fecha+'<br>'+texto+pie;
+    }
+    function mensajeAzul( fecha, texto){
+        cuerpo = "<div class='media'><div class='media-body mensaje-A'> <div>";
+        pie = " </div> </div> </div>";
+        return cuerpo+fecha+'<br>'+texto+pie;
     }
 </script>
 
 <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#home"><span id='userNickTitle'></span></a></li>
     <li id="mensajes"><a data-toggle="tab" href="#menu1">Mensajes</a></li>
-    <li><a data-toggle="tab" href="#menu2">Mis transacciones</a></li>
+    <li><a data-toggle="tab" href="#menu2">Transacciones</a></li>
 </ul>
 <div class="tab-content contenedorPrin">
     <div id="home" class="tab-pane fade in active">
@@ -132,86 +189,35 @@
 
     </div>
     <div id="menu1" class="tab-pane fade">
-        <span id='userNick' style="font-size: 250%;">Mensajes</span>
-        <hr/>
+<!--        <span id='userNick' style="font-size: 250%;">Mensajes</span>
+        <hr/>-->
         <!---->
-        <div class="col-xs-9">
-            <!-- Tab panes -->
-            <div class="tab-content">
-                <div class="tab-pane active" id="home-r">
-                    <h3>Home Tab.</h3>
-                    <!-- MENSAJES -->
-                    <div class="media">
-                        <a class="media-left" href="#">
-                              <div class = "rounded">
-                                  <span class='glyphicon glyphicon-user' style="font-size: 200%;"></span>
-                                  Usuario B
-                              </div>
-                            </a>
-                        <div class="media-body mensaje-B">
-                            <div>
-                            Lorem ipsum dolor sit amet.
-                        </div>
-                        </div>
-                      </div>
-                    
-                    <div class="media">
-                        <div class="media-body mensaje-A">
-                            <div>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                            laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-                            voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-                            non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                        </div>
-                        </div>
-                        <a class="media-left" href="#">
-                              <div class = "rounded">
-                              </div>
-                            </a>
-                      </div>
-                    <!-- MENSAJES -->
-                    <!--TEXTO-->
-                    <div class="textareaDiv">
-                        <textarea class="textarea"></textarea>
-                        <button type="button" class="btn navbar-inverse btn-block btn_submit" id="">Enviar</button>
-                    </div>
-                    <!--TEXTO-->
-                </div>
-                <div class="tab-pane" id="profile-r">
-                    <h3>Profile Tab.</h3>
-                    <!--MENSAJES-->
-                    <!--MENSAJES-->
-                    <!--TEXTO-->
-                    <div>
-                        <textarea></textarea>
-                    </div>
-                    <!--TEXTO-->
-                </div>
-                <div class="tab-pane" id="messages-r">Messages Tab.
-                    <!--TEXTO-->
-                    <div>
-                        <textarea></textarea>
-                    </div>
-                    <!--TEXTO--></div>
-                <div class="tab-pane" id="settings-r">Settings Tab.
-                    <!--TEXTO-->
-                    <div>
-                        <textarea></textarea>
-                    </div>
-                    <!--TEXTO--></div>
-            </div>
-        </div>
-
-        <div class="col-xs-3"> <!-- required for floating -->
-            <!-- Nav tabs -->
-            <ul class="nav nav-tabs tabs-right">
-                <li class="active"><a href="#home-r" data-toggle="tab">Home</a></li>
-                <li><a href="#profile-r" data-toggle="tab">Profile</a></li>
-                <li><a href="#messages-r" data-toggle="tab">Messages</a></li>
-                <li><a href="#settings-r" data-toggle="tab">Settings</a></li>
+        <section>
+            <h4 class="active" style="background-color:#fcfaf8 !important;">Mensajes</h4>
+            <ul>
             </ul>
-        </div>
+            <h4>Who?</h4>
+            <ul>
+                <!-- MENSAJES-->
+                <!-- MENSAJES-->
+                <!--TEXTO-->
+                    <textarea class="textarea" id="text1234"></textarea>
+                    <button type="button" class="btn navbar-inverse btn-block btn_submit" id="btn1234">Enviar</button>
+                <!--TEXTO-->
+            </ul>
+            <h4>What?</h4>
+            <ul>
+                Hola.
+            </ul>
+            <h4>Where?</h4>
+            <ul>
+                Hola.
+            </ul>
+            <h4>Why?</h4>
+            <ul>
+                Hola.
+            </ul>
+        </section>
         <!---->
         <div class="form-group row">
             <div class="col-sm-10">
@@ -221,6 +227,55 @@
     <div id="menu2" class="tab-pane fade">
         <span id='userNick' style="font-size: 250%;">Transacciones</span>
         <hr/>
+        <!---->
+        <section>
+            <h4 class="active";">Mensajes</h4>
+            <ul>
+            </ul>
+            <h4>What?</h4>
+            <ul>
+                <li>Potius inflammat, ut coercendi magis quam dedocendi esse videantur.</li>
+                <li>Atqui reperies, inquit, in hoc quidem pertinacem;</li>
+                <li>Verba tu fingas et ea dicas, quae non sentias?</li>
+            </ul>
+            <h4>Where?</h4>
+            <ul>
+                <!-- MENSAJES-->
+                <div class="media">
+                    <a class="media-left" href="#">
+                        <div class = "rounded">
+                            <span class='glyphicon glyphicon-user' style="font-size: 200%;"></span>
+                            Usuario B
+                        </div>
+                    </a>
+                    <div class="media-body mensaje-B">
+                        <div>
+                            Lorem ipsum dolor sit amet.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="media">
+                    <div class="media-body mensaje-A">
+                        <div>
+                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
+                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
+                            laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
+                            voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
+                            non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                        </div>
+                    </div>
+                </div>
+                <!-- MENSAJES-->
+                <!--TEXTO-->
+                <div class="textareaDiv">
+                    <textarea class="textarea"></textarea>
+                    <button type="button" class="btn navbar-inverse btn-block btn_submit" id="">Enviar</button>
+                </div>
+                <!--TEXTO-->
+            </ul>
+        </section>
+        <!---->
         <div class="form-group row">
             <div class="col-sm-10">
             </div>
