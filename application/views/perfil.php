@@ -240,7 +240,7 @@
         <hr/>-->
         <!---->
         <section id="usuariosMsg">
-            <h4 class="active" style="background-color:#fcfaf8 !important;">Mensajes</h4>
+            <h4 class="active">Mensajes</h4>
             <ul>
             </ul>
         </section>

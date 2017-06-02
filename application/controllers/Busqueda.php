@@ -14,4 +14,13 @@ class Busqueda extends CI_Controller {
 	{
                 echo 'Hola, controller';
 	}
+    public function cartas()
+    {
+        $this->load->model('Buscar_model');
+        $carta = $_POST['Carta'];
+        if($this->Buscar_model->buscarCartas($carta))
+            echo json_encode($this->Buscar_model->buscarCartas($carta));
+        else
+            echo false;
+    }
 }

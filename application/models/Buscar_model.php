@@ -21,13 +21,19 @@ class Buscar_model  extends CI_Model {
             //$this->load->database(); // ¿? necesario
         }
         
-    public function buscarCartas(){
+    public function buscarCartas($carta){
 
-        $query = $this->db->query("SELECT * FROM clientes");
+        $resultados = '';
+        $query = $this->db->query("SELECT * FROM cartas WHERE Nombre LIKE '%".$carta."%'");
 
-        foreach ($query->result_array() as $row)
-        {
-            return $row['Nombre'];
-        }
+        if( $query->num_rows() > 0){
+            foreach ($query->result_array() as $row)
+            {
+                $resultados .= $row['Nombre'].'|';
+            }
+            return $resultados;
+        }else
+            return false;
+
     }
 }
