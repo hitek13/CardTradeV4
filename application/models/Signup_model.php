@@ -47,7 +47,7 @@ class Signup_model  extends CI_Model {
         else
             return 'No existe el usuario';
     }
-    public function userMsg ($idUser){
+    public function userTthread ($idUser){
         
         $resp = '';
         $query = $this->db->query("select Nick, idUsuario 
@@ -66,5 +66,31 @@ class Signup_model  extends CI_Model {
         }
         else
             return 'No existe el usuario';
+    }
+    public function userMsg ($idUser){
+        $i = 0;
+        $resp = '';
+        $query = $this->db->query("SELECT m.*,u.Nick
+                                    FROM `mensajes` as m , usuarios as u
+                                    WHERE (m.idEmisor = '".$idUser."' AND m.idReceptor = u.idUsuario) 
+                                    OR (m.idReceptor = '".$idUser."' AND m.idEmisor = u.idUsuario) 
+                                    ORDER BY m.FecEnvio ASC 
+                                ;");
+        if($query->num_rows() > 0){
+            foreach ($query->result_array() as $row)
+            {
+                $resp[$i] = $row['idEmisor'].'|'.$row['idReceptor'].'|'.$row['FecEnvio'].'|'.$row['Texto'].'|'.$row['Visto'].'|'.$row['Nick'];
+                $i++;
+            }
+            return $resp;
+        }
+        else
+            return 'No existe el usuario';
+    }
+    public function sendMsg ($idUser, $idReceptor, $fecha, $texto){
+        $query = $this->db->query("INSERT INTO mensajes
+                                  (idMensaje, idEmisor, idReceptor, FecEnvio, Texto)
+                                  VALUES ('".uniqid()."', '".$idUser."', '".$idReceptor."', '".$fecha."', '".$texto."');");
+            return $query;
     }
 }

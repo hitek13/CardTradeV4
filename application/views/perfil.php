@@ -10,9 +10,12 @@
 <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>application/resources/css/bootstrap.vertical-tabs.min.css">
 <script>
     $(document).ready(function(){
+        
         $("#userNickTitle").text(localStorage.Nick);
         $("#userNick").text(localStorage.Nick);
         cargarUsuarios();
+        //$("<h1>Hola</h1>").insertBefore('#texto'+'1234');
+        //loadSMG('1234', 'Hola');
         var parametros = {
             'Nick': localStorage.Nick,
             'idUser': localStorage.id
@@ -28,25 +31,13 @@
             },
             error: function(result){
                 console.log(result);
-                alert('Error: '+result);
+                alert('Error getInfo: '+result);
             }
         });
-        $.ajax({
-            data: parametros,
-            type: "POST",
-            url: '<?php echo site_url("Users/getMsg")?>', // Forma correcta de llamar al controlador
-            dataType: 'json',
-            success: function(result){
-                //alert(result);
-            },
-            error: function(result){
-                console.log(result);
-                alert('Error: '+result);
-            }
-        });
-        $('#mensajes').on('click', function(){ 
+
+   /*     $('#mensajes').on('click', function(){ 
             cargar_msg(localStorage.id);
-        });
+        });*/
         /*||||||||||*/
         $('section h4').click(function(event) {
             event.preventDefault();
@@ -104,7 +95,7 @@
         $.ajax({
             data: parametros,
             type: "POST",
-            url: '<?php echo site_url("Users/getMsg")?>', // Forma correcta de llamar al controlador
+            url: '<?php echo site_url("Users/getTthread")?>', // Forma correcta de llamar al controlador
             dataType: 'json',
             success: function(resultado){
                 datos = resultado.split('|');
@@ -113,6 +104,7 @@
                     id = datos[i].split(';')[1];
                     addUser(id, nombre);
                 }
+                populateMSG();     
             },
             error: function(resultado){
                 console.log(resultado);
@@ -133,10 +125,10 @@
     }
     function addUser (id, nick){
         test = "<h4>What?</h4><ul><li>Potius inflammat, ut coercendi magis quam dedocendi esse videantur.</li><li>Atqui reperies, inquit, in hoc quidem pertinacem;</li><li>Verba tu fingas et ea dicas, quae non sentias?</li></ul>"
-        cabeza = '<h4 id='+id+' onclick="active(this)" onmouseout="deactive(this)">';
-        cuerpo1 = "</h4><ul><!-- MENSAJES-->Hola"+id+"<!-- MENSAJES--><!--TEXTO--><textarea class='textarea' id='text";
+        cabeza = '<h4 id='+id+' onclick="active(this)" >';
+        cuerpo1 = "</h4><ul><!-- MENSAJES--><!-- MENSAJES--><!--TEXTO--><textarea class='textarea' id='text";
         cuerpo2 = "'></textarea><button type='button' class='btn navbar-inverse btn-block btn_submit'";
-        click = "onclick=addMSG('text"+id+"texto') ";
+        click = "onclick=addMSG('"+id+"') ";
         pie = ">Enviar</button><!--TEXTO--></ul>";
         $('#usuariosMsg').append(cabeza+nick+cuerpo1+id+cuerpo2+click+pie);
     }
@@ -152,18 +144,77 @@
         return cuerpo+'<h6>'+fecha+'</h6>'+texto+pie;
     }
     function addMSG (btn){
-        if($('#'+btn).val()) {
-                $(mensajeAzul( Date($.now()) , $('#'+btn).val())).insertBefore('#'+btn);
-                $('#'+btn).val('')
+        //alert('llega');
+        var d = new Date($.now());
+        fecha = d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
+        texto = $('#text'+btn).val();
+        if($('#text'+btn).val()) {
+                $(mensajeAzul( fecha, $('#text'+btn).val())).insertBefore('#text'+btn);
+                $('#text'+btn).val('')
             }
+        var parametros = {
+            'idUser': localStorage.id,
+            'idReceptor': btn,
+            'fechaHoy': fecha,
+            'texto': texto
+        };
+        $.ajax({
+            data: parametros,
+            type: "POST",
+            url: '<?php echo site_url("Users/sendMsg")?>', // Forma correcta de llamar al controlador
+            dataType: 'json',
+            success: function(resultado){
+                //alert("Exito "+resultado);
+                //alert(resultado.length);
+                //assingMsg(resultado);
+            },
+            error: function(resultado){
+                console.log(resultado);
+                alert('Error: '+resultado);
+            }
+        });
+    }
+    function loadMSG (btn, text){
+        //alert('#texto'+btn);
+        //$(text).insertBefore('#texto'+btn);
+        $(text).insertBefore('#text'+btn);
     }
     function active(objeto){
         $('h4').removeClass();
         $(objeto).addClass('active');
         
     }
-    function deactive(objeto){
-        //$(objeto).removeClass();
+    function populateMSG(){
+        var parametros = {
+            'idUser': localStorage.id
+        };
+        $.ajax({
+            data: parametros,
+            type: "POST",
+            url: '<?php echo site_url("Users/getMsg")?>', // Forma correcta de llamar al controlador
+            dataType: 'json',
+            success: function(resultado){
+                //alert(resultado[1]);
+                //alert(resultado.length);
+                assingMsg(resultado);
+            },
+            error: function(resultado){
+                console.log(resultado);
+                alert('Error: '+resultado);
+            }
+        });
+    }
+    function assingMsg(msgs){
+
+        for(i=0; i < msgs.length; i++){
+            currentMSG = msgs[i].split('|');
+            if( currentMSG[0] == localStorage.id){
+                loadMSG(currentMSG[1] ,mensajeAzul(currentMSG[2], currentMSG[3]));
+            }else{
+                if( currentMSG[1] == localStorage.id)
+                    loadMSG(currentMSG[0] ,mensajeVerde( currentMSG[5], currentMSG[2], currentMSG[3]));  
+            }
+        }
     }
 </script>
 
@@ -295,7 +346,7 @@
                 <!-- MENSAJES-->
                 <!--TEXTO-->
                 <div class="textareaDiv">
-                    <textarea class="textarea"></textarea>
+                    <textarea class="textarea" id='texto1234'></textarea>
                     <button type="button" class="btn navbar-inverse btn-block btn_submit" id="">Enviar</button>
                 </div>
                 <!--TEXTO-->

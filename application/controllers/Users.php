@@ -41,9 +41,22 @@ class Users extends CI_Controller {
         $idUser = $_POST['idUser'];
         echo json_encode($this->Signup_model->userInfo($Nick, $idUser));
     }
+    public function getTthread(){
+        $this->load->model('Signup_model');
+        $idUser = $_POST['idUser'];
+        echo json_encode($this->Signup_model->userTthread($idUser));
+    }
     public function getMsg(){
         $this->load->model('Signup_model');
         $idUser = $_POST['idUser'];
         echo json_encode($this->Signup_model->userMsg($idUser));
+    }
+    public function sendMsg(){
+        $this->load->model('Signup_model');
+        $idUser = $_POST['idUser'];
+        $idReceptor = $_POST['idReceptor'];
+        $fecha = $_POST['fechaHoy'];
+        $texto = $_POST['texto'];
+        echo json_encode($this->Signup_model->sendMsg($idUser, $idReceptor, $fecha, $texto));
     }
 }
