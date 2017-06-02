@@ -12,6 +12,7 @@
     $(document).ready(function(){
         $("#userNickTitle").text(localStorage.Nick);
         $("#userNick").text(localStorage.Nick);
+        cargarUsuarios();
         var parametros = {
             'Nick': localStorage.Nick,
             'idUser': localStorage.id
@@ -96,6 +97,29 @@
             }
         });
     });
+    function cargarUsuarios() {
+        var parametros = {
+            'idUser': localStorage.id
+        };
+        $.ajax({
+            data: parametros,
+            type: "POST",
+            url: '<?php echo site_url("Users/getMsg")?>', // Forma correcta de llamar al controlador
+            dataType: 'json',
+            success: function(resultado){
+                datos = resultado.split('|');
+                for(i=0; i< datos.length-1; i++){
+                    nombre = datos[i].split(';')[0];
+                    id = datos[i].split(';')[1];
+                    addUser(id, nombre);
+                }
+            },
+            error: function(resultado){
+                console.log(resultado);
+                alert('Error: '+resultado);
+            }
+        });
+    }
     function colocar(Email, Nombre, Apellidos, DNI, Direccion, Ciudad, Pais, FechaNac, Saldo, Valoracion){
         $('#spanSaldo').html(Saldo+" <span class='glyphicon glyphicon-eur' style='font-size: 65%;'></span>");
         $('#spanEmail').html(Email);
@@ -107,16 +131,39 @@
         $('#spanFecNac').html(FechaNac);
         $('#spanDireccion').html(Direccion+'<br>'+Ciudad+'<br>'+Pais);
     }
+    function addUser (id, nick){
+        test = "<h4>What?</h4><ul><li>Potius inflammat, ut coercendi magis quam dedocendi esse videantur.</li><li>Atqui reperies, inquit, in hoc quidem pertinacem;</li><li>Verba tu fingas et ea dicas, quae non sentias?</li></ul>"
+        cabeza = '<h4 id='+id+' onclick="active(this)" onmouseout="deactive(this)">';
+        cuerpo1 = "</h4><ul><!-- MENSAJES-->Hola"+id+"<!-- MENSAJES--><!--TEXTO--><textarea class='textarea' id='text";
+        cuerpo2 = "'></textarea><button type='button' class='btn navbar-inverse btn-block btn_submit'";
+        click = "onclick=addMSG('text"+id+"texto') ";
+        pie = ">Enviar</button><!--TEXTO--></ul>";
+        $('#usuariosMsg').append(cabeza+nick+cuerpo1+id+cuerpo2+click+pie);
+    }
     function mensajeVerde(nick, fecha, texto){
         cabeza = "<div class='media'> <a class='media-left' href='#'> <div class = 'rounded'> <span class='glyphicon glyphicon-user' style='font-size: 200%;'></span>";
         cuerpo = "</div> </a> <div class='media-body mensaje-B'> <div>";
         pie = " </div> </div> </div>";
-        return cabeza+nick+cuerpo+fecha+'<br>'+texto+pie;
+        return cabeza+nick+cuerpo+'<h6>'+fecha+'</h6>'+texto+pie;
     }
     function mensajeAzul( fecha, texto){
         cuerpo = "<div class='media'><div class='media-body mensaje-A'> <div>";
         pie = " </div> </div> </div>";
-        return cuerpo+fecha+'<br>'+texto+pie;
+        return cuerpo+'<h6>'+fecha+'</h6>'+texto+pie;
+    }
+    function addMSG (btn){
+        if($('#'+btn).val()) {
+                $(mensajeAzul( Date($.now()) , $('#'+btn).val())).insertBefore('#'+btn);
+                $('#'+btn).val('')
+            }
+    }
+    function active(objeto){
+        $('h4').removeClass();
+        $(objeto).addClass('active');
+        
+    }
+    function deactive(objeto){
+        //$(objeto).removeClass();
     }
 </script>
 
@@ -192,30 +239,9 @@
 <!--        <span id='userNick' style="font-size: 250%;">Mensajes</span>
         <hr/>-->
         <!---->
-        <section>
+        <section id="usuariosMsg">
             <h4 class="active" style="background-color:#fcfaf8 !important;">Mensajes</h4>
             <ul>
-            </ul>
-            <h4>Who?</h4>
-            <ul>
-                <!-- MENSAJES-->
-                <!-- MENSAJES-->
-                <!--TEXTO-->
-                    <textarea class="textarea" id="text1234"></textarea>
-                    <button type="button" class="btn navbar-inverse btn-block btn_submit" id="btn1234">Enviar</button>
-                <!--TEXTO-->
-            </ul>
-            <h4>What?</h4>
-            <ul>
-                Hola.
-            </ul>
-            <h4>Where?</h4>
-            <ul>
-                Hola.
-            </ul>
-            <h4>Why?</h4>
-            <ul>
-                Hola.
             </ul>
         </section>
         <!---->
@@ -229,7 +255,7 @@
         <hr/>
         <!---->
         <section>
-            <h4 class="active";">Mensajes</h4>
+            <h4 class="active">Mensajes</h4>
             <ul>
             </ul>
             <h4>What?</h4>

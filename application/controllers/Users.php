@@ -43,8 +43,7 @@ class Users extends CI_Controller {
     }
     public function getMsg(){
         $this->load->model('Signup_model');
-        $Nick = $_POST['Nick'];
         $idUser = $_POST['idUser'];
-        echo json_encode($this->Signup_model->userMsg($Nick, $idUser));
+        echo json_encode($this->Signup_model->userMsg($idUser));
     }
 }
