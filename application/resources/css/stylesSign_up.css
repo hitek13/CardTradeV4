@@ -26,3 +26,9 @@
 .btn_submit {
     color: white;
 }
+.fasciculo {
+     margin-top: 5%;
+}
+.fasciculo > p {
+    margin-top: 20px;
+}

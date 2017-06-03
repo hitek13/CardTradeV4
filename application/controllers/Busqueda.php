@@ -12,7 +12,9 @@ class Busqueda extends CI_Controller {
 
 	public function index()
 	{
-                echo 'Hola, controller';
+                $this->load->view('headers/main_header');
+                $this->load->view('busqueda');
+                $this->load->view('footers/main_footer');
 	}
     public function cartas()
     {

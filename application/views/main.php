@@ -23,15 +23,22 @@
     }
     function crearCartas(cartas){
 
-        cabeza = '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4"><div class="card"><img src="<?php echo base_url(); ?>application/resources/images/img_avatar2.png" alt="Avatar" style="width:100%"><div class="container"><h4><b>';
+        cabeza = '<div class="col-xs-12 col-sm-6 col-md-4 col-lg-4" onclick="cardViwe(this)" id="';
+        cuerpo = '"><div class="card"><img src="<?php echo base_url(); ?>application/resources/images/img_avatar2.png" alt="Avatar" style="width:100%"><div class="container"><h4><b>';
         pie = '</b></h4><br><p>Interior Designer</p></div></div></div>';
 
         for(i=0; i < cartas.length-1; i++) {
-            insertText(cabeza + cartas[i] + pie);
+            cartaValor = cartas[i].split(';')
+            insertText(cabeza + cartaValor[1] + cuerpo + cartaValor[0] + pie);
         }
     }
     function insertText(texto){
         $('#resultadosBusqueda').append(texto);
+    }
+    function cardViwe(objeto){
+        localStorage.setItem("cartaBuscada", $(objeto).prop('id') );
+        //alert(localStorage.cartaBuscada);
+        $(location).attr('href', '<?php echo site_url('Busqueda') ?>');
     }
 </script>
 <!-- ||||||||||||||||||||||||| Search bar
