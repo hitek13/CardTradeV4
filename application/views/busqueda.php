@@ -1,6 +1,7 @@
 <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>application/resources/css/stylesSign_up.css">
 <script>
 $(document).ready(function(){
+    
     var parametros = {
                 'idCarta': localStorage.cartaBuscada
             };
@@ -15,7 +16,7 @@ $(document).ready(function(){
                         fillFasciculos(result);
                     }
                     else
-                        alert('No hay fasciculos');
+                        alert('No hay fasciculos a la venta');
                 },
                 error: function(result){
                     console.log(result);
@@ -24,7 +25,10 @@ $(document).ready(function(){
             });
             
     $('#addFasciculo').on('click', function (){
-        var parametros = {
+        if( !localStorage.id )
+            alert('Inicia sesión para vender');
+        else{   
+            var parametros = {
                 'idCarta': localStorage.cartaBuscada,
                 'idUsuario': localStorage.id,
                 'Precio': $('#inputPrecio').val(),
@@ -50,6 +54,7 @@ $(document).ready(function(){
                     alert('¿No has introducido ya esta carta?');
                 }
             });
+        }
     });
 });
 function fillFasciculos (cadena){
@@ -75,30 +80,35 @@ function fillFasciculos (cadena){
 }
 function comprarCarta (idFasciculo, idUsuario){
     //alert("Fasciculo: "+idFasciculo+", Usuario: "+idUsuario+" Cantidad: "+$('#'+idFasciculo).val());
-    var d = new Date($.now());
-        fecha = d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
-    var parametros = {
-                'idFasciculo': idFasciculo,
-                'idComprador': localStorage.id,
-                'idVendedor': idUsuario,
-                'Precio': $('#'+idFasciculo).val(),
-                'Cantidad': $('#inputCantidad').val(),
-                'GE': 1.5,
-                'fecha': fecha
-            };
-            $.ajax({
-                data: parametros,
-                type: "POST",
-                url: '<?php echo site_url("Transacciones/comprar")?>', // Forma correcta de llamar al controlador
-                dataType: 'json',
-                success: function(result){
-                   alert('Exito '+result);
-                },
-                error: function(result){
-                    console.log(result);
-                    alert('Error'+result);
-                }
-            });
+    if( !localStorage.id )
+        alert('Inicia sesión para comprar');
+    else{   
+        var d = new Date($.now());
+            fecha = d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
+        var parametros = {
+                    'idFasciculo': idFasciculo,
+                    'idComprador': localStorage.id,
+                    'idVendedor': idUsuario,
+                    'Cantidad': $('#'+idFasciculo).val(),
+                    'GE': 1.5,
+                    'fecha': fecha
+                };
+                //alert('P'+$('#'+idFasciculo).val()+'/ C'+$('#inputCantidad').val()+'/ ')
+                $.ajax({
+                    data: parametros,
+                    type: "POST",
+                    url: '<?php echo site_url("Transacciones/comprar")?>', // Forma correcta de llamar al controlador
+                    dataType: 'json',
+                    success: function(result){
+                       alert(result);
+                       $(location).attr('href', '<?php echo site_url('Busqueda') ?>')
+                    },
+                    error: function(result){
+                        console.log(result);
+                        alert(result);
+                    }
+                });
+        }
 }
 function construirDesplegable (cantidad, idFasciculo){
     options = '';

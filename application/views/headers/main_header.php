@@ -86,6 +86,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <a class="navbar-brand" href="<?php echo site_url('Main') ?>">FoW Card-Trade</a>
           </div>
           <ul class="nav navbar-nav">
+              <!--
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Lenguage
                 <span class="caret"></span></a>
@@ -103,9 +104,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                height="16px"/>
                           English</a></li>
                 </ul>
-              </li>
+              </li>  
             <li class="active"><a href="#">Home</a></li>
-            <li><a href="#">Page 1</a></li>
+            <li><a href="#">Page 1</a></li>-->
           </ul>
           <ul class="nav navbar-nav navbar-right" id="sessionUL">
            <!-- <li><a href="<?php /*echo site_url('Main/sign_up') */?>"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
@@ -131,12 +132,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </a>
                 <ul class="dropdown-menu" id="sessionULmovil">
                     <li><a href="<?php echo site_url('Main') ?>">Home</a></li>
-                    <li><a href="#">Page 1</a></li>
-                    <li><a href="#">Page 2</a></li>
+                   <!-- <li><a href="#">Page 1</a></li>
+                    <li><a href="#">Page 2</a></li> -->
 <!--                    <li><a href="--><?php //echo site_url('Main/sign_up') ?><!--"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>-->
 <!--                    <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>-->
                 </ul>
               </li>
+<!--
               <li class="dropdown">
                 <a class="dropdown-toggle" data-toggle="dropdown" href="#">Lenguage
                 <span class="caret"></span></a>
@@ -155,6 +157,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                           English</a></li>
                 </ul>
               </li>
+-->
           </ul>
         </div>
     </nav>

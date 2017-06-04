@@ -14,6 +14,7 @@
         $("#userNickTitle").text(localStorage.Nick);
         $("#userNick").text(localStorage.Nick);
         cargarUsuarios();
+        cargarComprasActivas();
         //$("<h1>Hola</h1>").insertBefore('#texto'+'1234');
         //loadSMG('1234', 'Hola');
         var parametros = {
@@ -216,6 +217,24 @@
             }
         }
     }
+    function cargarComprasActivas() {
+        var parametros = {
+            'idUsuario': localStorage.id
+        };
+        $.ajax({
+            data: parametros,
+            type: "POST",
+            url: '<?php echo site_url("Transacciones/comprasActivas")?>', // Forma correcta de llamar al controlador
+            dataType: 'json',
+            success: function(resultado){
+                alert(resultado);
+            },
+            error: function(resultado){
+                console.log(resultado);
+                alert('Error: '+resultado);
+            }
+        });
+    }
 </script>
 
 <ul class="nav nav-tabs">
@@ -306,50 +325,21 @@
         <hr/>
         <!---->
         <section>
-            <h4 class="active">Mensajes</h4>
-            <ul>
+            <h4 class="active">Compras activas</h4>
+            <ul id="comprasActivas">
+                <h1>Aqui van las compras activas</h1>
             </ul>
-            <h4>What?</h4>
+            <h4>Compras finalizadas</h4>
             <ul>
-                <li>Potius inflammat, ut coercendi magis quam dedocendi esse videantur.</li>
-                <li>Atqui reperies, inquit, in hoc quidem pertinacem;</li>
-                <li>Verba tu fingas et ea dicas, quae non sentias?</li>
+                <h1>Aqui van las compras finalizadas</h1>
             </ul>
-            <h4>Where?</h4>
+            <h4>Ventas activas</h4>
             <ul>
-                <!-- MENSAJES-->
-                <div class="media">
-                    <a class="media-left" href="#">
-                        <div class = "rounded">
-                            <span class='glyphicon glyphicon-user' style="font-size: 200%;"></span>
-                            Usuario B
-                        </div>
-                    </a>
-                    <div class="media-body mensaje-B">
-                        <div>
-                            Lorem ipsum dolor sit amet.
-                        </div>
-                    </div>
-                </div>
-
-                <div class="media">
-                    <div class="media-body mensaje-A">
-                        <div>
-                            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-                            labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco
-                            laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in
-                            voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat
-                            non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-                        </div>
-                    </div>
-                </div>
-                <!-- MENSAJES-->
-                <!--TEXTO-->
-                <div class="textareaDiv">
-                    <textarea class="textarea" id='texto1234'></textarea>
-                    <button type="button" class="btn navbar-inverse btn-block btn_submit" id="">Enviar</button>
-                </div>
-                <!--TEXTO-->
+                <h1>Aqui van las ventas activas</h1>
+            </ul>
+            <h4>Ventas finalizadas</h4>
+            <ul>
+                <h1>Aqui van las ventas finalizadas</h1>
             </ul>
         </section>
         <!---->

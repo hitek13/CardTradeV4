@@ -26,11 +26,39 @@ class Transacciones  extends CI_Controller {
         $idFasciculo = $_POST['idFasciculo'];
         $idComprador = $_POST['idComprador'];
         $idVendedor = $_POST['idVendedor'];
-        $precio = $_POST['Precio'];
         $cantidad = $_POST['Cantidad'];
         $gastos= $_POST['GE'];
         $fecha = $_POST['fecha'];
         
-        echo json_encode( $this->Compras_model->comprarFasciculo($idFasciculo, $idComprador, $idVendedor, $precio, $cantidad, $gastos, $fecha) );
+        echo json_encode( $this->Compras_model->comprarFasciculo($idFasciculo, $idComprador, $idVendedor, $cantidad, $gastos, $fecha) );
+    }
+    public function comprasActivas(){
+        $this->load->model('Compras_model');
+        
+        $idUsuario = $_POST['idUsuario'];
+        
+        echo json_encode($this->Compras_model->getComprasActivas($idUsuario));
+        //echo json_encode('hola, controller');
+    }
+    public function comprasFin (){
+        $this->load->model('Compras_model');
+        
+        $idUsuario = $_POST['idUsuario'];
+        
+        echo json_encode($this->Compras_model->getComprasActivas($idUsuario));
+    }
+    public function ventasActivas (){
+        $this->load->model('Compras_model');
+        
+        $idUsuario = $_POST['idUsuario'];
+        
+        echo json_encode($this->Compras_model->getComprasActivas($idUsuario));
+    }
+    public function ventasFin (){
+        $this->load->model('Compras_model');
+        
+        $idUsuario = $_POST['idUsuario'];
+        
+        echo json_encode($this->Compras_model->getComprasActivas($idUsuario));
     }
 }
