@@ -15,6 +15,9 @@
         $("#userNick").text(localStorage.Nick);
         cargarUsuarios();
         cargarComprasActivas();
+        cargarComprasFin();
+        cargarVentasActivas();
+        cargarVentasFin();
         //$("<h1>Hola</h1>").insertBefore('#texto'+'1234');
         //loadSMG('1234', 'Hola');
         var parametros = {
@@ -227,13 +230,178 @@
             url: '<?php echo site_url("Transacciones/comprasActivas")?>', // Forma correcta de llamar al controlador
             dataType: 'json',
             success: function(resultado){
-                alert(resultado);
+                //alert(resultado);
+                crearCompra(resultado)
             },
             error: function(resultado){
                 console.log(resultado);
                 alert('Error: '+resultado);
             }
         });
+    }
+    function crearCompra(cadena){
+        ventas = cadena.split('|');
+        cabeza = '<div class="col-sm-12"><div class="col-sm-2"><h3>';
+        cuerpo1 = '</h3></div><div class="col-sm-1"><h3>';
+        cuerpo2 = '</h3></div><div class="col-sm-1"><h3>';
+        cuerpo3 = '</h3></div><div class="col-sm-1"><h3>';
+        cuerpo4 = '</h3></div><div class="col-sm-1"><h3>';
+        cuerpo5 = '</h3></div><div class="col-sm-3"><h5><br>';
+        cuerpo6 = '</h5></div><div class="col-sm-1"><h3>';
+        cuerpo7 = '</h3></div><div class="col-sm-1"><p class="btn btn-success btn-lg saldo" id="addSaldo" onclick="compraFinalizada (3.1415)"> Recibido <span class="glyphicon glyphicon-ok"></span> </p></div></div><hr/>';
+        pie = '<div class="col-sm-12"><br></div>';
+        check = '<span class="glyphicon glyphicon-check"></span>';
+        nocheck = '<span class="glyphicon glyphicon-unchecked"></span>';
+        result = nocheck;
+        for(i=0; i < ventas.length-1; i++){
+            //alert('Llega');
+            //string = 'Hola';
+            datos = ventas[i].split(';');
+            //alert(datos[2]);
+            if(datos[6] == 1)
+                result = check;
+            string = cabeza+datos[2]+cuerpo1+datos[4]+cuerpo2+datos[7]+cuerpo3+datos[3]+cuerpo4+datos[8]+cuerpo5+datos[5]+cuerpo6+result+cuerpo7;
+            $('#comprasActivas').append(string);
+            //alert(string);
+        }
+        $('#comprasActivas').append(pie);
+    }
+    function compraFinalizada (idVenta){
+        alert('Compra realizada'+ idVenta);
+    }
+    function envioFinalizado (idVenta){
+        alert('Envio realizado'+ idVenta);
+    }
+    function cargarComprasFin() {
+        var parametros = {
+            'idUsuario': localStorage.id
+        };
+        $.ajax({
+            data: parametros,
+            type: "POST",
+            url: '<?php echo site_url("Transacciones/comprasFin")?>', // Forma correcta de llamar al controlador
+            dataType: 'json',
+            success: function(resultado){
+                //alert(resultado);
+                crearCompraFin(resultado)
+            },
+            error: function(resultado){
+                console.log(resultado);
+                alert('Error: '+resultado);
+            }
+        });
+    }
+    function cargarVentasActivas() {
+        var parametros = {
+            'idUsuario': localStorage.id
+        };
+        $.ajax({
+            data: parametros,
+            type: "POST",
+            url: '<?php echo site_url("Transacciones/comprasActivas")?>', // Forma correcta de llamar al controlador
+            dataType: 'json',
+            success: function(resultado){
+                //alert(resultado);
+                crearVentaActiva(resultado)
+            },
+            error: function(resultado){
+                console.log(resultado);
+                alert('Error: '+resultado);
+            }
+        });
+    }
+    function cargarVentasFin() {
+        var parametros = {
+            'idUsuario': localStorage.id
+        };
+        $.ajax({
+            data: parametros,
+            type: "POST",
+            url: '<?php echo site_url("Transacciones/comprasFin")?>', // Forma correcta de llamar al controlador
+            dataType: 'json',
+            success: function(resultado){
+                //alert(resultado);
+                crearVentaFin(resultado)
+            },
+            error: function(resultado){
+                console.log(resultado);
+                alert('Error: '+resultado);
+            }
+        });
+    }
+    function crearCompraFin(cadena){
+        ventas = cadena.split('|');
+        cabeza = '<div class="col-sm-12"><div class="col-sm-2"><h3>';
+        cuerpo1 = '</h3></div><div class="col-sm-2"><h3>';
+        cuerpo2 = '</h3></div><div class="col-sm-2"><h3>';
+        cuerpo3 = '</h3></div><div class="col-sm-1"><h3>';
+        cuerpo4 = '</h3></div><div class="col-sm-1"><h3>';
+        cuerpo5 = '</h3></div><div class="col-sm-2"><h5><br>';
+        cuerpo6 = '</h5></div><div class="col-sm-1"><h5>';
+        cuerpo8 = '</h5></div><div class="col-sm-1"><h5>';
+        cuerpo7 = '</h5></div>';
+        check = '<span class="glyphicon glyphicon-check"></span>';
+        pie = '<div class="col-sm-12"><br></div><hr/></div>';
+        for(i=0; i < ventas.length-1; i++){
+            //alert('Llega');
+            //string = 'Hola';
+            datos = ventas[i].split(';');
+            //alert(datos[2]);
+            string = cabeza+datos[2]+cuerpo1+datos[4]+cuerpo2+datos[7]+cuerpo3+datos[3]+cuerpo4+datos[8]+cuerpo5+datos[5]+cuerpo6+'Enviado'+check+cuerpo8+'Recibido'+check+cuerpo7;
+            $('#comprasFin').append(string);
+            //alert(string);
+        }
+        $('#comprasFin').append(pie);
+    }
+    function crearVentaActiva(cadena){
+        ventas = cadena.split('|');
+        cabeza = '<div class="col-sm-12"><div class="col-sm-2"><h3>';
+        cuerpo1 = '</h3></div><div class="col-sm-2"><h3>';
+        cuerpo2 = '</h3></div><div class="col-sm-2"><h3>';
+        cuerpo3 = '</h3></div><div class="col-sm-1"><h3>';
+        cuerpo4 = '</h3></div><div class="col-sm-1"><h3>';
+        cuerpo5 = '</h3></div><div class="col-sm-2"><h5><br>';
+        cuerpo6 = '</h5></div><div class="col-sm-1"><h5>';
+        cuerpo7 = '</h3></div><div class="col-sm-1"><p class="btn btn-success btn-lg saldo" id="addSaldo" onclick="envioFinalizado(3.1415)"> Enviado <span class="glyphicon glyphicon-ok"></span> </p></div></div><hr/>';
+        check = '<div class="col-sm-1"><span class="glyphicon glyphicon-check"></span></div></div><hr/>';
+        //nocheck = '<span class="glyphicon glyphicon-unchecked"></span>';
+        pie = '<div class="col-sm-12"><br></div><hr/></div>';
+        for(i=0; i < ventas.length-1; i++){
+            //alert('Llega');
+            //string = 'Hola';
+            datos = ventas[i].split(';');
+            //alert(datos[2]);
+            if(datos[6] == 1)
+                cuerpo7 = check;
+            string = cabeza+datos[2]+cuerpo1+datos[4]+cuerpo2+datos[7]+cuerpo3+datos[3]+cuerpo4+datos[8]+cuerpo5+datos[5]+cuerpo6+cuerpo7;
+            $('#ventasActivas').append(string);
+            //alert(string);
+        }
+        $('#ventasActivas').append(pie);
+    }
+    function crearVentaFin(cadena){
+        ventas = cadena.split('|');
+        cabeza = '<div class="col-sm-12"><div class="col-sm-2"><h3>';
+        cuerpo1 = '</h3></div><div class="col-sm-2"><h3>';
+        cuerpo2 = '</h3></div><div class="col-sm-2"><h3>';
+        cuerpo3 = '</h3></div><div class="col-sm-1"><h3>';
+        cuerpo4 = '</h3></div><div class="col-sm-1"><h3>';
+        cuerpo5 = '</h3></div><div class="col-sm-2"><h5><br>';
+        cuerpo6 = '</h5></div><div class="col-sm-1"><h5>';
+        cuerpo8 = '</h5></div><div class="col-sm-1"><h5>';
+        cuerpo7 = '</h5></div>';
+        check = '<span class="glyphicon glyphicon-check"></span>';
+        pie = '<div class="col-sm-12"><br></div><hr/></div>';
+        for(i=0; i < ventas.length-1; i++){
+            //alert('Llega');
+            //string = 'Hola';
+            datos = ventas[i].split(';');
+            //alert(datos[2]);
+            string = cabeza+datos[2]+cuerpo1+datos[4]+cuerpo2+datos[7]+cuerpo3+datos[3]+cuerpo4+datos[8]+cuerpo5+datos[5]+cuerpo6+'Enviado'+check+cuerpo8+'Recibido'+check+cuerpo7;
+            $('#ventasFin').append(string);
+            //alert(string);
+        }
+        $('#ventasFin').append(pie);
     }
 </script>
 
@@ -327,19 +495,94 @@
         <section>
             <h4 class="active">Compras activas</h4>
             <ul id="comprasActivas">
-                <h1>Aqui van las compras activas</h1>
+              
+                    <div class="col-sm-2">
+                        <h5>Nombre</h5>
+                    </div>
+                    <div class="col-sm-1">
+                        <h5>Cantidad</h5>
+                    </div>
+                    <div class="col-sm-1">
+                        <h5>Precio</h5>
+                    </div>
+                    <div class="col-sm-1">
+                        <h5>Gastos de envio</h5>
+                    </div>
+                    <div class="col-sm-2">
+                        <h5>PrecioTOTAL</h5>
+                    </div>
+                    <div class="col-sm-1">
+                        <h5>Fecha</h5>
+                    </div>
+                    <div class="col-sm-2">
+                        <h5>Enviado</h5>
+                    </div>
             </ul>
             <h4>Compras finalizadas</h4>
-            <ul>
-                <h1>Aqui van las compras finalizadas</h1>
+            <ul id="comprasFin">
+                <div class="col-sm-2">
+                        <h5>Nombre</h5>
+                    </div>
+                    <div class="col-sm-1">
+                        <h5>Cantidad</h5>
+                    </div>
+                    <div class="col-sm-1">
+                        <h5>Precio</h5>
+                    </div>
+                    <div class="col-sm-1">
+                        <h5Gastos de envio</h5>
+                    </div>
+                    <div class="col-sm-2">
+                        <h5>PrecioTOTAL</h5>
+                    </div>
+                    <div class="col-sm-1">
+                        <h5>Fecha</h5>
+                    </div>
+                    
             </ul>
             <h4>Ventas activas</h4>
-            <ul>
-                <h1>Aqui van las ventas activas</h1>
+            <ul id="ventasActivas">
+                <div class="col-sm-2">
+                        <h5>Nombre</h5>
+                    </div>
+                    <div class="col-sm-1">
+                        <h5>Cantidad</h5>
+                    </div>
+                    <div class="col-sm-1">
+                        <h5>Precio</h5>
+                    </div>
+                    <div class="col-sm-1">
+                        <h5>Gastos de envio</h5>
+                    </div>
+                    <div class="col-sm-2">
+                        <h5>PrecioTOTAL</h5>
+                    </div>
+                    <div class="col-sm-1">
+                        <h5>Fecha</h5>
+                    </div>
+                    
             </ul>
             <h4>Ventas finalizadas</h4>
-            <ul>
-                <h1>Aqui van las ventas finalizadas</h1>
+            <ul id="ventasFin">
+                <div class="col-sm-2">
+                        <h5>Nombre</h5>
+                    </div>
+                    <div class="col-sm-1">
+                        <h5>Cantidad</h5>
+                    </div>
+                    <div class="col-sm-1">
+                        <h5>Precio</h5>
+                    </div>
+                    <div class="col-sm-1">
+                        <h5>Gastos de envio</h5>
+                    </div>
+                    <div class="col-sm-2">
+                        <h5>PrecioTOTAL</h5>
+                    </div>
+                    <div class="col-sm-1">
+                        <h5>Fecha</h5>
+                    </div>
+                    
             </ul>
         </section>
         <!---->
