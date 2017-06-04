@@ -59,4 +59,9 @@ class Users extends CI_Controller {
         $texto = $_POST['texto'];
         echo json_encode($this->Signup_model->sendMsg($idUser, $idReceptor, $fecha, $texto));
     }
+    public function getInfo(){
+    $this->load->model('Signup_model');
+    $idUser = $_POST['idUser'];
+    echo json_encode($this->Signup_model->getInfo($idUser));
+    }
 }
