@@ -90,7 +90,7 @@ class Compras_model   extends CI_Model {
         $cadena = '';              ///          0       1               2       3           4               5       6           7               8               
         $query = $this->db->query("SELECT t.idVenta, t.idVendedor, u.Nick, t.gastoEnvio, t.Cantidad, t.FecVenta, t.Enviado, t.Precio, t.PrecioTOTAL
                                    FROM `transacciones` AS t, usuarios AS u
-                                   WHERE idComprador = '".$idUsuario."' AND t.idVendedor = u.idUsuario;");
+                                   WHERE idComprador = '".$idUsuario."' AND t.idVendedor = u.idUsuario AND t.Recibido = 0;");
         if($query->num_rows() > 0 ){
             foreach ($query->result_array() as $row)
                 {
@@ -105,7 +105,7 @@ class Compras_model   extends CI_Model {
         $cadena = '';              ///          0       1               2       3           4               5       6           7               8               
         $query = $this->db->query("SELECT t.idVenta, t.idVendedor, u.Nick, t.gastoEnvio, t.Cantidad, t.FecVenta, t.Enviado, t.Precio, t.PrecioTOTAL, t.Recibido
                                    FROM `transacciones` AS t, usuarios AS u
-                                   WHERE idComprador = '".$idUsuario."' AND t.idVendedor = u.idUsuario;");
+                                   WHERE idComprador = '".$idUsuario."' AND t.idVendedor = u.idUsuario AND t.Recibido = 1;");
         if($query->num_rows() > 0 ){
             foreach ($query->result_array() as $row)
                 {
@@ -115,5 +115,68 @@ class Compras_model   extends CI_Model {
         }else{
             return 'No hay compras activas';
         }
+    }
+    public function getVentasActivas ($idUsuario){
+        $cadena = '';              ///          0       1               2       3           4               5       6           7               8               
+        $query = $this->db->query("SELECT t.idVenta, t.idComprador, u.Nick, t.gastoEnvio, t.Cantidad, t.FecVenta, t.Enviado, t.Precio, t.PrecioTOTAL, t.Recibido
+                                   FROM `transacciones` AS t, usuarios AS u
+                                   WHERE idVendedor = '".$idUsuario."' AND t.idComprador = u.idUsuario AND t.Recibido = 0;");
+        if($query->num_rows() > 0 ){
+            foreach ($query->result_array() as $row)
+                {
+                 $cadena .= $row['idVenta'].';'.$row['idVendedor'].';'.$row['Nick'].';'.$row['gastoEnvio'].';'.$row['Cantidad'].';'.$row['FecVenta'].';'.$row['Enviado'].';'.$row['Precio'].';'.$row['PrecioTOTAL'].';'.$row['Recibido'].'|';
+                }
+            return $cadena;
+        }else{
+            return 'No hay compras activas';
+        }
+    }
+    public function getVentasFin ($idUsuario){
+        $cadena = '';              ///          0       1               2       3           4               5       6           7               8               
+        $query = $this->db->query("SELECT t.idVenta, t.idComprador, u.Nick, t.gastoEnvio, t.Cantidad, t.FecVenta, t.Enviado, t.Precio, t.PrecioTOTAL, t.Recibido
+                                   FROM `transacciones` AS t, usuarios AS u
+                                   WHERE idVendedor = '".$idUsuario."' AND t.idComprador = u.idUsuario AND t.Recibido = 1;");
+        if($query->num_rows() > 0 ){
+            foreach ($query->result_array() as $row)
+                {
+                 $cadena .= $row['idVenta'].';'.$row['idVendedor'].';'.$row['Nick'].';'.$row['gastoEnvio'].';'.$row['Cantidad'].';'.$row['FecVenta'].';'.$row['Enviado'].';'.$row['Precio'].';'.$row['PrecioTOTAL'].';'.$row['Recibido'].'|';
+                }
+            return $cadena;
+        }else{
+            return 'No hay compras activas';
+        }
+    }
+    public function setRecibido ($idVenta){
+        $total = 0;
+        
+        $queryTOTAL = $this->db->query("SELECT PrecioTOTAL, idVendedor
+                                    FROM transacciones   
+                                    WHERE idVenta = '".$idVenta."'; ");
+        if($queryTOTAL->num_rows() > 0 ){
+            foreach ($queryTOTAL->result_array() as $row)
+                {
+                $total = $row['PrecioTOTAL'];
+                $idVendedor = $row['idVendedor'];
+                }
+            $updateSaldoAdmin = $this->db->query("UPDATE usuarios 
+                                                SET Saldo = Saldo - ".(floatval($total)*0.95)."
+                                                WHERE idUsuario = '593418dc89481' ");
+            $updateSaldo = $this->db->query("UPDATE usuarios 
+                                                SET Saldo = Saldo + ".(floatval($total)*0.95)."
+                                                WHERE idUsuario = '".$idVendedor."' ");
+            $query = $this->db->query("UPDATE transacciones 
+                                    SET Recibido = 1
+                                    WHERE idVenta = '".$idVenta."'; ");
+            return 'Se ha marcado la compra como recibida.';
+        }else{
+            return 'No se ha encontrado el usuario';
+            }
+        
+    }
+    public function setEnviado ($idVenta){
+        $query = $this->db->query("UPDATE transacciones 
+                                    SET Enviado = 1
+                                    WHERE idVenta = '".$idVenta."'; "); 
+        return 'Se ha marcado la compra como enviada, cuando el comprador marque como recibido, se te ingresara el dinero.';
     }
 }

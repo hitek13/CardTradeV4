@@ -33,6 +33,12 @@ class Main extends CI_Controller {
         $this->load->view('perfil');
         $this->load->view('footers/main_footer');
     }
+    public function userInfo()
+    {
+        $this->load->view('headers/main_header');
+        $this->load->view('userInfo');
+        $this->load->view('footers/main_footer');
+    }
     public function resultadosBusqueda()
     {
         $this->load->model('Buscar_model');

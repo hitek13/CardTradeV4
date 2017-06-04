@@ -242,21 +242,23 @@
     function crearCompra(cadena){
         ventas = cadena.split('|');
         cabeza = '<div class="col-sm-12"><div class="col-sm-2"><h3>';
-        cuerpo1 = '</h3></div><div class="col-sm-1"><h3>';
         cuerpo2 = '</h3></div><div class="col-sm-1"><h3>';
         cuerpo3 = '</h3></div><div class="col-sm-1"><h3>';
         cuerpo4 = '</h3></div><div class="col-sm-1"><h3>';
         cuerpo5 = '</h3></div><div class="col-sm-3"><h5><br>';
         cuerpo6 = '</h5></div><div class="col-sm-1"><h3>';
-        cuerpo7 = '</h3></div><div class="col-sm-1"><p class="btn btn-success btn-lg saldo" id="addSaldo" onclick="compraFinalizada (3.1415)"> Recibido <span class="glyphicon glyphicon-ok"></span> </p></div></div><hr/>';
         pie = '<div class="col-sm-12"><br></div>';
         check = '<span class="glyphicon glyphicon-check"></span>';
         nocheck = '<span class="glyphicon glyphicon-unchecked"></span>';
         result = nocheck;
         for(i=0; i < ventas.length-1; i++){
+            result = nocheck;
             //alert('Llega');
             //string = 'Hola';
             datos = ventas[i].split(';');
+            cuerpo1 = ' <span class="glyphicon glyphicon-envelope" onclick="verUserInfo(\''+datos[1]+'\')"></span></h3></div><div class="col-sm-1"><h3>';
+        
+            cuerpo7 = '</h3></div><div class="col-sm-1"><p class="btn btn-success btn-lg saldo" id="addSaldo" onclick="compraFinalizada (\''+datos[0]+'\')"> Recibido <span class="glyphicon glyphicon-ok"></span> </p></div></div><hr/>';
             //alert(datos[2]);
             if(datos[6] == 1)
                 result = check;
@@ -267,10 +269,46 @@
         $('#comprasActivas').append(pie);
     }
     function compraFinalizada (idVenta){
-        alert('Compra realizada'+ idVenta);
+        //alert('Compra realizada '+ idVenta);
+        var parametros = {
+            'idVenta': idVenta
+        };
+        $.ajax({
+            data: parametros,
+            type: "POST",
+            url: '<?php echo site_url("Transacciones/recibido")?>', // Forma correcta de llamar al controlador
+            dataType: 'json',
+            success: function(resultado){
+                alert(resultado);
+                $(location).attr('href', '<?php echo site_url('Main/perfil') ?>');
+                //crearCompraFin(resultado)
+            },
+            error: function(resultado){
+                console.log(resultado);
+                alert('Error: '+resultado);
+            }
+        });
     }
     function envioFinalizado (idVenta){
-        alert('Envio realizado'+ idVenta);
+        //alert('Envio realizado'+ idVenta);
+        var parametros = {
+            'idVenta': idVenta
+        };
+        $.ajax({
+            data: parametros,
+            type: "POST",
+            url: '<?php echo site_url("Transacciones/enviado")?>', // Forma correcta de llamar al controlador
+            dataType: 'json',
+            success: function(resultado){
+                alert(resultado);
+                $(location).attr('href', '<?php echo site_url('Main/perfil') ?>');
+                //crearCompraFin(resultado)
+            },
+            error: function(resultado){
+                console.log(resultado);
+                alert('Error: '+resultado);
+            }
+        });
     }
     function cargarComprasFin() {
         var parametros = {
@@ -332,7 +370,7 @@
     function crearCompraFin(cadena){
         ventas = cadena.split('|');
         cabeza = '<div class="col-sm-12"><div class="col-sm-2"><h3>';
-        cuerpo1 = '</h3></div><div class="col-sm-2"><h3>';
+
         cuerpo2 = '</h3></div><div class="col-sm-2"><h3>';
         cuerpo3 = '</h3></div><div class="col-sm-1"><h3>';
         cuerpo4 = '</h3></div><div class="col-sm-1"><h3>';
@@ -346,6 +384,7 @@
             //alert('Llega');
             //string = 'Hola';
             datos = ventas[i].split(';');
+            cuerpo1 = ' <span class="glyphicon glyphicon-envelope" onclick="verUserInfo(\''+datos[1]+'\')"></span></h3></div><div class="col-sm-1"><h3>';
             //alert(datos[2]);
             string = cabeza+datos[2]+cuerpo1+datos[4]+cuerpo2+datos[7]+cuerpo3+datos[3]+cuerpo4+datos[8]+cuerpo5+datos[5]+cuerpo6+'Enviado'+check+cuerpo8+'Recibido'+check+cuerpo7;
             $('#comprasFin').append(string);
@@ -356,13 +395,11 @@
     function crearVentaActiva(cadena){
         ventas = cadena.split('|');
         cabeza = '<div class="col-sm-12"><div class="col-sm-2"><h3>';
-        cuerpo1 = '</h3></div><div class="col-sm-2"><h3>';
         cuerpo2 = '</h3></div><div class="col-sm-2"><h3>';
         cuerpo3 = '</h3></div><div class="col-sm-1"><h3>';
         cuerpo4 = '</h3></div><div class="col-sm-1"><h3>';
         cuerpo5 = '</h3></div><div class="col-sm-2"><h5><br>';
         cuerpo6 = '</h5></div><div class="col-sm-1"><h5>';
-        cuerpo7 = '</h3></div><div class="col-sm-1"><p class="btn btn-success btn-lg saldo" id="addSaldo" onclick="envioFinalizado(3.1415)"> Enviado <span class="glyphicon glyphicon-ok"></span> </p></div></div><hr/>';
         check = '<div class="col-sm-1"><span class="glyphicon glyphicon-check"></span></div></div><hr/>';
         //nocheck = '<span class="glyphicon glyphicon-unchecked"></span>';
         pie = '<div class="col-sm-12"><br></div><hr/></div>';
@@ -370,6 +407,8 @@
             //alert('Llega');
             //string = 'Hola';
             datos = ventas[i].split(';');
+            cuerpo1 = ' <span class="glyphicon glyphicon-envelope" onclick="verUserInfo(\''+datos[1]+'\')"></span></h3></div><div class="col-sm-1"><h3>';
+            cuerpo7 = '</h3></div><div class="col-sm-1"><p class="btn btn-success btn-lg saldo" id="addSaldo" onclick="envioFinalizado(\''+datos[0]+'\')"> Enviado <span class="glyphicon glyphicon-ok"></span> </p></div></div><hr/>';
             //alert(datos[2]);
             if(datos[6] == 1)
                 cuerpo7 = check;
@@ -382,7 +421,6 @@
     function crearVentaFin(cadena){
         ventas = cadena.split('|');
         cabeza = '<div class="col-sm-12"><div class="col-sm-2"><h3>';
-        cuerpo1 = '</h3></div><div class="col-sm-2"><h3>';
         cuerpo2 = '</h3></div><div class="col-sm-2"><h3>';
         cuerpo3 = '</h3></div><div class="col-sm-1"><h3>';
         cuerpo4 = '</h3></div><div class="col-sm-1"><h3>';
@@ -396,6 +434,7 @@
             //alert('Llega');
             //string = 'Hola';
             datos = ventas[i].split(';');
+            cuerpo1 = ' <span class="glyphicon glyphicon-envelope" onclick="verUserInfo(\''+datos[1]+'\')"></span></h3></div><div class="col-sm-1"><h3>';
             //alert(datos[2]);
             string = cabeza+datos[2]+cuerpo1+datos[4]+cuerpo2+datos[7]+cuerpo3+datos[3]+cuerpo4+datos[8]+cuerpo5+datos[5]+cuerpo6+'Enviado'+check+cuerpo8+'Recibido'+check+cuerpo7;
             $('#ventasFin').append(string);

@@ -54,7 +54,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             //alert(result);
                             localStorage.setItem("id", result);
                             localStorage.setItem("Nick", $('#user').val());
-                            $(location).attr('href', '<?php echo site_url('Main') ?>')
+                            $(location).attr('href', '<?php echo site_url('Main') ?>');
                         }
                     },
                     error: function(result){
@@ -70,6 +70,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 $(location).attr('href', '<?php echo site_url('Main') ?>')
             });
         });
+        function verUserInfo(idUser){
+            //alert('Hola usuario '+idUser);
+            localStorage.setItem("userInfo", idUser);
+            $(location).attr('href', '<?php echo site_url('Main/userInfo') ?>');
+        }
     </script>
         
         <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>application/resources/css/stylesHeader.css">

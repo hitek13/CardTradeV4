@@ -60,7 +60,7 @@ $(document).ready(function(){
 function fillFasciculos (cadena){
     lineFasciculo = cadena.split('|');
     cabeza = '<div class="col-sm-2"><h3>'; //Nick
-    cuerpo1 = '</h3></div><div class="col-sm-2"><h3>'; //Estilo
+    //cuerpo1 = '</h3></div><div class="col-sm-2"><h3>'; //Estilo
     cuerpo2 = '</h3></div><div class="col-sm-2"><h3>'; //Calidad
     cuerpo3 = '</h3></div><div class="col-sm-2"><h4>'; //Cantidad
     cuerpo4 = '</h4></div><div class="col-sm-2"><h3>'; //Precio
@@ -71,6 +71,7 @@ function fillFasciculos (cadena){
     for(i=0; i < lineFasciculo.length-1; i++){
         //alert(i);
         elementos = lineFasciculo[i].split(';');
+        cuerpo1 = ' <span class="glyphicon glyphicon-envelope" onclick="verUserInfo(\''+elementos[6]+'\')"></span></h3></div><div class="col-sm-2"><h3>';
         click = 'name="botonP" onclick="comprarCarta(\''+elementos[5]+'\',\''+elementos[6]+'\' )" ';
         
         string = cabeza+elementos[0]+cuerpo1+elementos[1]+cuerpo2+elementos[2]+cuerpo3+ construirDesplegable(elementos[3], elementos[5] ) +cuerpo4+elementos[4]+cuerpo5+' '+click+' '+pie;
@@ -101,7 +102,7 @@ function comprarCarta (idFasciculo, idUsuario){
                     dataType: 'json',
                     success: function(result){
                        alert(result);
-                       $(location).attr('href', '<?php echo site_url('Busqueda') ?>')
+                       $(location).attr('href', '<?php echo site_url('Busqueda') ?>');
                     },
                     error: function(result){
                         console.log(result);
