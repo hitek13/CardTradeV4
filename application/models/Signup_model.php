@@ -16,7 +16,7 @@ class Signup_model  extends CI_Model {
     public function InsertInto($Nick, $email, $Nombre, $Pass, $Apell, $Direc, $Pais, $Ciudad, $DNI, $fecha){
 
         $query = $this->db->query("INSERT INTO usuarios
-                                  (idUsuario, Nick, Email, Pass, Nombre, Apellidos, Direccion, Ciudad, Pais, DNI, fechaNac)
+                                  (idUsuario, Nick, Email, Pass, Nombre, Apellidos, Direccion, Pais, Ciudad, DNI, fechaNac)
                                   VALUES ('".uniqid()."', '".$Nick."', '".$email."', '".$Nombre."', '".$Pass."',
                                    '".$Apell."', '".$Direc ."', '".$Pais."', '".$Ciudad."', '".$DNI."', '".$fecha ."');");
 

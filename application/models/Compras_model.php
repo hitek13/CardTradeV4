@@ -118,14 +118,16 @@ class Compras_model   extends CI_Model {
     }
     public function getVentasActivas ($idUsuario){
         $cadena = '';              ///          0       1               2       3           4               5       6           7               8               
-        $query = $this->db->query("SELECT t.idVenta, t.idComprador, u.Nick, t.gastoEnvio, t.Cantidad, t.FecVenta, t.Enviado, t.Precio, t.PrecioTOTAL, t.Recibido
-                                   FROM `transacciones` AS t, usuarios AS u
-                                   WHERE idVendedor = '".$idUsuario."' AND t.idComprador = u.idUsuario AND t.Recibido = 0;");
+        $query = $this->db->query("SELECT t.idVenta, t.idComprador, u.Nick, t.gastoEnvio, t.Cantidad, t.FecVenta, t.Enviado, t.Precio, t.PrecioTOTAL, u.Nombre AS nomUser, u.Apellidos, u.Direccion, u.Ciudad, u.Pais, c.Nombre AS nomCarta, f.Estilo
+                                   FROM `transacciones` AS t, usuarios AS u, cartas AS c, fasciculos AS f
+                                   WHERE idVendedor = '".$idUsuario."' AND t.idComprador = u.idUsuario AND f.idFasciculo = t.idFasciculo AND c.idCarta = f.idCarta AND t.Recibido = 0;");
         if($query->num_rows() > 0 ){
             foreach ($query->result_array() as $row)
-                {
-                 $cadena .= $row['idVenta'].';'.$row['idVendedor'].';'.$row['Nick'].';'.$row['gastoEnvio'].';'.$row['Cantidad'].';'.$row['FecVenta'].';'.$row['Enviado'].';'.$row['Precio'].';'.$row['PrecioTOTAL'].';'.$row['Recibido'].'|';
-                }
+            {
+                $direccion = $row['nomUser'].' '.$row['Apellidos'].'<br>'.$row['Direccion'].'<br>'.$row['Ciudad'].'<br>'.$row['Pais'];
+                $pedido = $row['nomCarta'].'<br>'.$row['Estilo'].' x'.$row['Cantidad'].'<br>'.$row['gastoEnvio'];
+                $cadena .= $row['idVenta'].';'.$row['idComprador'].';'.$row['Nick'].';'.' '.';'.$direccion.';'.$row['FecVenta'].';'.$row['Enviado'].';'.$pedido.';'.$row['PrecioTOTAL'].'|';
+            }
             return $cadena;
         }else{
             return 'No hay compras activas';
@@ -133,17 +135,19 @@ class Compras_model   extends CI_Model {
     }
     public function getVentasFin ($idUsuario){
         $cadena = '';              ///          0       1               2       3           4               5       6           7               8               
-        $query = $this->db->query("SELECT t.idVenta, t.idComprador, u.Nick, t.gastoEnvio, t.Cantidad, t.FecVenta, t.Enviado, t.Precio, t.PrecioTOTAL, t.Recibido
-                                   FROM `transacciones` AS t, usuarios AS u
-                                   WHERE idVendedor = '".$idUsuario."' AND t.idComprador = u.idUsuario AND t.Recibido = 1;");
+        $query = $this->db->query("SELECT t.idVenta, t.idComprador, u.Nick, t.gastoEnvio, t.Cantidad, t.FecVenta, t.Enviado, t.Precio, t.PrecioTOTAL, u.Nombre AS nomUser, u.Apellidos, u.Direccion, u.Ciudad, u.Pais, c.Nombre AS nomCarta, f.Estilo
+                                   FROM `transacciones` AS t, usuarios AS u, cartas AS c, fasciculos AS f
+                                   WHERE idVendedor = '".$idUsuario."' AND t.idComprador = u.idUsuario AND f.idFasciculo = t.idFasciculo AND c.idCarta = f.idCarta AND t.Recibido = 1;");
         if($query->num_rows() > 0 ){
             foreach ($query->result_array() as $row)
-                {
-                 $cadena .= $row['idVenta'].';'.$row['idVendedor'].';'.$row['Nick'].';'.$row['gastoEnvio'].';'.$row['Cantidad'].';'.$row['FecVenta'].';'.$row['Enviado'].';'.$row['Precio'].';'.$row['PrecioTOTAL'].';'.$row['Recibido'].'|';
-                }
+            {
+                $direccion = $row['nomUser'].' '.$row['Apellidos'].'<br>'.$row['Direccion'].'<br>'.$row['Ciudad'].'<br>'.$row['Pais'];
+                $pedido = $row['nomCarta'].'<br>'.$row['Estilo'].' x'.$row['Cantidad'].'<br>'.$row['gastoEnvio'];
+                $cadena .= $row['idVenta'].';'.$row['idComprador'].';'.$row['Nick'].';'.' '.';'.$direccion.';'.$row['FecVenta'].';'.$row['Enviado'].';'.$pedido.';'.$row['PrecioTOTAL'].'|';
+            }
             return $cadena;
         }else{
-            return 'No hay compras activas';
+            return 'No hay compras finalizadas';
         }
     }
     public function setRecibido ($idVenta){

@@ -71,11 +71,18 @@ class Buscar_model  extends CI_Model {
                                         WHERE f.idUsuario = '".$idUsuario."' AND f.Vendido = '0' AND f.idUsuario = u.idUsuario AND c.idCarta = f.idCarta");
         if( $query->num_rows() > 0){
             foreach ($query->result_array() as $row)
-            {
+            {                   //      0                   1                   2               3                       4               5                           6                      
                 $resultados .= $row['Nombre'].';'.$row['Estilo'].';'.$row['Calidad'].';'.$row['Cantidad'].';'.$row['Precio'].';'.$row['idFasciculo'].';'.$row['idUsuario'].'|';
             }
             return $resultados;
         }else
             return false;
+    }
+    public function deleteFasciculo ($idFasciculo, $idUsuario){
+        $query = $this->db->query("DELETE
+                                    FROM `fasciculos` 
+                                    WHERE idFasciculo = '".$idFasciculo."' AND idUsuario = '".$idUsuario."'
+                                    ");
+        return $query;
     }
 }

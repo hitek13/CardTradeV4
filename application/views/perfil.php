@@ -18,6 +18,7 @@
         cargarComprasFin();
         cargarVentasActivas();
         cargarVentasFin();
+        misOfertas ();
         //$("<h1>Hola</h1>").insertBefore('#texto'+'1234');
         //loadSMG('1234', 'Hola');
         var parametros = {
@@ -336,7 +337,7 @@
         $.ajax({
             data: parametros,
             type: "POST",
-            url: '<?php echo site_url("Transacciones/comprasActivas")?>', // Forma correcta de llamar al controlador
+            url: '<?php echo site_url("Transacciones/ventasActivas")?>', // Forma correcta de llamar al controlador
             dataType: 'json',
             success: function(resultado){
                 //alert(resultado);
@@ -355,7 +356,7 @@
         $.ajax({
             data: parametros,
             type: "POST",
-            url: '<?php echo site_url("Transacciones/comprasFin")?>', // Forma correcta de llamar al controlador
+            url: '<?php echo site_url("Transacciones/ventasFin")?>', // Forma correcta de llamar al controlador
             dataType: 'json',
             success: function(resultado){
                 //alert(resultado);
@@ -377,7 +378,7 @@
         cuerpo5 = '</h3></div><div class="col-sm-2"><h5><br>';
         cuerpo6 = '</h5></div><div class="col-sm-1"><h5>';
         cuerpo8 = '</h5></div><div class="col-sm-1"><h5>';
-        cuerpo7 = '</h5></div>';
+        cuerpo7 = '</h5></div><hr/>';
         check = '<span class="glyphicon glyphicon-check"></span>';
         pie = '<div class="col-sm-12"><br></div><hr/></div>';
         for(i=0; i < ventas.length-1; i++){
@@ -395,19 +396,19 @@
     function crearVentaActiva(cadena){
         ventas = cadena.split('|');
         cabeza = '<div class="col-sm-12"><div class="col-sm-2"><h3>';
-        cuerpo2 = '</h3></div><div class="col-sm-2"><h3>';
-        cuerpo3 = '</h3></div><div class="col-sm-1"><h3>';
+        cuerpo2 = '</h5></div><div class="col-sm-1"><h5>';
+        cuerpo3 = '</h5></div><div class="col-sm-1"><h3>';
         cuerpo4 = '</h3></div><div class="col-sm-1"><h3>';
         cuerpo5 = '</h3></div><div class="col-sm-2"><h5><br>';
         cuerpo6 = '</h5></div><div class="col-sm-1"><h5>';
         check = '<div class="col-sm-1"><span class="glyphicon glyphicon-check"></span></div></div><hr/>';
         //nocheck = '<span class="glyphicon glyphicon-unchecked"></span>';
-        pie = '<div class="col-sm-12"><br></div><hr/></div>';
+        pie = '<div class="col-sm-12"><br></div><hr/></div><hr/>';
         for(i=0; i < ventas.length-1; i++){
             //alert('Llega');
             //string = 'Hola';
             datos = ventas[i].split(';');
-            cuerpo1 = ' <span class="glyphicon glyphicon-envelope" onclick="verUserInfo(\''+datos[1]+'\')"></span></h3></div><div class="col-sm-1"><h3>';
+            cuerpo1 = ' <span class="glyphicon glyphicon-envelope" onclick="verUserInfo(\''+datos[1]+'\')"></span></h3></div><div class="col-sm-2"><h5>';
             cuerpo7 = '</h3></div><div class="col-sm-1"><p class="btn btn-success btn-lg saldo" id="addSaldo" onclick="envioFinalizado(\''+datos[0]+'\')"> Enviado <span class="glyphicon glyphicon-ok"></span> </p></div></div><hr/>';
             //alert(datos[2]);
             if(datos[6] == 1)
@@ -421,20 +422,20 @@
     function crearVentaFin(cadena){
         ventas = cadena.split('|');
         cabeza = '<div class="col-sm-12"><div class="col-sm-2"><h3>';
-        cuerpo2 = '</h3></div><div class="col-sm-2"><h3>';
-        cuerpo3 = '</h3></div><div class="col-sm-1"><h3>';
+        cuerpo2 = '</h5></div><div class="col-sm-1"><h5>';
+        cuerpo3 = '</h5></div><div class="col-sm-1"><h3>';
         cuerpo4 = '</h3></div><div class="col-sm-1"><h3>';
         cuerpo5 = '</h3></div><div class="col-sm-2"><h5><br>';
         cuerpo6 = '</h5></div><div class="col-sm-1"><h5>';
         cuerpo8 = '</h5></div><div class="col-sm-1"><h5>';
-        cuerpo7 = '</h5></div>';
+        cuerpo7 = '</h5></div><hr/>';
         check = '<span class="glyphicon glyphicon-check"></span>';
-        pie = '<div class="col-sm-12"><br></div><hr/></div>';
+        pie = '<div class="col-sm-12"><br></div></div><hr/>';
         for(i=0; i < ventas.length-1; i++){
             //alert('Llega');
             //string = 'Hola';
             datos = ventas[i].split(';');
-            cuerpo1 = ' <span class="glyphicon glyphicon-envelope" onclick="verUserInfo(\''+datos[1]+'\')"></span></h3></div><div class="col-sm-1"><h3>';
+            cuerpo1 = ' <span class="glyphicon glyphicon-envelope" onclick="verUserInfo(\''+datos[1]+'\')"></span></h3></div><div class="col-sm-2"><h5>';
             //alert(datos[2]);
             string = cabeza+datos[2]+cuerpo1+datos[4]+cuerpo2+datos[7]+cuerpo3+datos[3]+cuerpo4+datos[8]+cuerpo5+datos[5]+cuerpo6+'Enviado'+check+cuerpo8+'Recibido'+check+cuerpo7;
             $('#ventasFin').append(string);
@@ -442,11 +443,81 @@
         }
         $('#ventasFin').append(pie);
     }
+    function misOfertas (){
+        var parametros = {
+            'idUsuario': localStorage.id
+        };
+        $.ajax({
+            data: parametros,
+            type: "POST",
+            url: '<?php echo site_url("Fasciculos/showFasciculosByUser")?>', // Forma correcta de llamar al controlador
+            dataType: 'json',
+            success: function(result){
+                if(result){
+                    //alert(result);
+                    fillFasciculos(result);
+                }
+                else
+                    $('#misOfertas').append('No hay fasciculos a la venta');
+            },
+            error: function(result){
+                console.log(result);
+                alert('Error: '+result);
+            }
+        });
+    }
+    function fillFasciculos (cadena){
+        lineFasciculo = cadena.split('|');
+        pelo = '<div class="col-sm-12"> <div class="col-sm-2"><h4>Nombre</h4> </div> <div class="col-sm-2"><h4>Estilo</h4> </div><div class="col-sm-2">    <h4>Calidad</h4></div><div class="col-sm-2">    <h4>Cantidad</h4></div><div class="col-sm-2">    <h4>Precio</h4></div><div class="col-sm-1">    <h4> Comprar </h4></div></div>';
+        $('#listaVentas').append(pelo);
+        cabeza = '<div class="col-sm-12"><div class="col-sm-2"><h3>'; //Nick
+        //cuerpo1 = '</h3></div><div class="col-sm-2"><h3>'; //Estilo
+        cuerpo2 = '</h3></div><div class="col-sm-2"><h3>'; //Calidad
+        cuerpo3 = '</h3></div><div class="col-sm-2"><h3>'; //Cantidad
+        cuerpo4 = '</h3></div><div class="col-sm-2"><h3>'; //Precio
+        cuerpo5 = '€</h3></div><div class="col-sm-2"><br><p class="btn btn-danger btn-lg" '; //id's
+
+        pie = '>Borrar <span class="glyphicon glyphicon-remove"></span> </p></div> </div><hr/> <br>';
+        //alert('Llega');
+        $('#misOfertas').append('<div class="col-sm-12"></div>');
+        $('#misOfertas').append('<div class="col-sm-2"><h5>Nombre</h5></div><div class="col-sm-2"><h5>Estilo</h5></div><div class="col-sm-2"><h5>Calidad</h5></div><div class="col-sm-2"><h5>Cantidad</h5></div><div class="col-sm-2"><h5>Precio</h5></div>');
+        for(i=0; i < lineFasciculo.length-1; i++){
+            //alert(i);
+            elementos = lineFasciculo[i].split(';');
+            cuerpo1 = '</h3></div><div class="col-sm-2"><h3>';
+            click = 'name="botonP" onclick="borrarVenta(\''+elementos[5]+'\',\''+elementos[6]+'\' )" ';
+
+            string =cabeza+elementos[0]+cuerpo1+elementos[1]+cuerpo2+elementos[2]+cuerpo3+elementos[3]+cuerpo4+elementos[4]+cuerpo5+' '+click+' '+pie;
+            //alert(string);
+            $('#misOfertas').append(string);
+        }
+        $('#misOfertas').append('<div class="col-sm-12"><br></div>');
+    }
+    function borrarVenta(fasciculo, usuario){
+        var parametros = {
+            'idUsuario': usuario,
+            'idFasciculo': fesciculo
+        };
+        $.ajax({
+            data: parametros,
+            type: "POST",
+            url: '<?php echo site_url("Fasciculos/deleteFasciculo")?>', // Forma correcta de llamar al controlador
+            dataType: 'json',
+            success: function(result){
+                alert(result);
+            },
+            error: function(result){
+                console.log(result);
+                alert('Error: '+result);
+            }
+        });
+    }
 </script>
 
 <ul class="nav nav-tabs">
     <li class="active"><a data-toggle="tab" href="#home"><span id='userNickTitle'></span></a></li>
     <li id="mensajes"><a data-toggle="tab" href="#menu1">Mensajes</a></li>
+    <li><a data-toggle="tab" href="#menu3">En venta</a></li>
     <li><a data-toggle="tab" href="#menu2">Transacciones</a></li>
 </ul>
 <div class="tab-content contenedorPrin">
@@ -455,16 +526,16 @@
             <a href="<?php echo site_url('Main') ?>"><span class='glyphicon glyphicon-pencil' style="font-size: 140%;"></span></a>
         <hr/>
         <div class="form-group row">
-            <label for="inputNick" class="col-sm-2 col-form-label">Saldo</label>
+            <label for="inputNick" class="col-sm-2 col-form-label"><br>Saldo</label>
             <div class="col-sm-5">
                 <h3><span id="spanSaldo"></span></h3>
             </div>
             <div class="col-sm-5">
-                <p class="btn btn-success btn-lg saldo" id="addSaldo"> Añadir saldo <span class='glyphicon glyphicon-eur'></span> </p>
+                <p class="btn btn-primary btn-lg saldo" id="addSaldo"> Añadir saldo <span class='glyphicon glyphicon-eur'></span> </p>
             </div>
         </div>
         <div class="form-group row">
-            <label for="inputNick" class="col-sm-2 col-form-label">Valoración <span class='glyphicon glyphicon-star-empty'></span></label>
+            <label for="inputNick" class="col-sm-2 col-form-label"><br>Valoración <span class='glyphicon glyphicon-star-empty'></span></label>
             <div class="col-sm-5">
                 <h3><span id="spanValoracion"></span></h3>
             </div>
@@ -527,12 +598,25 @@
             </div>
         </div>
     </div>
+    <div id="menu3" class="tab-pane fade">
+<!--        <span id='userNick' style="font-size: 250%;">Mensajes</span>
+        <hr/>-->
+        <!---->
+        <section id="misOfertas">
+            
+        </section>
+        <!---->
+        <div class="form-group row">
+            <div class="col-sm-10">
+            </div>
+        </div>
+    </div>
     <div id="menu2" class="tab-pane fade">
         <span id='userNick' style="font-size: 250%;">Transacciones</span>
         <hr/>
         <!---->
         <section>
-            <h4 class="active">Compras activas</h4>
+            <h4>Compras activas</h4>
             <ul id="comprasActivas">
                 <div class="col-sm-12">
                     <div class="col-sm-2">
@@ -588,10 +672,10 @@
                         <h5>Nombre</h5>
                     </div>
                     <div class="col-sm-2">
-                        <h5>Pedido</h5>
+                        <h5>Direccion</h5>
                     </div>
                     <div class="col-sm-2">
-                        <h5>Direccion</h5>
+                        <h5>Pedido</h5>
                     </div>
                     <div class="col-sm-2">
                         <h5>TOTAL<span class='glyphicon glyphicon-eur'></span></h5>
@@ -608,14 +692,11 @@
                     <div class="col-sm-2">
                         <h5>Nombre</h5>
                     </div>
-                    <div class="col-sm-1">
-                        <h5>Cantidad</h5>
+                    <div class="col-sm-2">
+                        <h5>Direccion</h5>
                     </div>
-                    <div class="col-sm-1">
-                        <h5>Precio</h5>
-                    </div>
-                    <div class="col-sm-1">
-                        <h5>Gastos de envio</h5>
+                    <div class="col-sm-2">
+                        <h5>Pedido</h5>
                     </div>
                     <div class="col-sm-2">
                         <h5>TOTAL<span class='glyphicon glyphicon-eur'></span></h5>

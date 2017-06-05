@@ -73,7 +73,7 @@
     });
 </script>
 <div class="container formulario">
-    <h1>Regístrate!</h1>
+    <h1>¡Regístrate!</h1>
     <form>
         <div class="form-group row">
             <label for="inputNick" class="col-sm-2 col-form-label">Nick</label>

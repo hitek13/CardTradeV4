@@ -48,11 +48,14 @@ class Transacciones  extends CI_Controller {
         echo json_encode($this->Compras_model->getComprasFin($idUsuario));
     }
     public function ventasActivas (){
-        $this->load->model('Compras_model');
-        
+        $this->load->model('Compras_model');      
         $idUsuario = $_POST['idUsuario'];
-        
-        echo json_encode($this->Compras_model->getComprasActivas($idUsuario));
+        echo json_encode($this->Compras_model->getVentasActivas($idUsuario));
+    }
+    public function ventasFin (){
+        $this->load->model('Compras_model');      
+        $idUsuario = $_POST['idUsuario'];
+        echo json_encode($this->Compras_model->getVentasFin($idUsuario));
     }
     public function recibido (){
         $this->load->model('Compras_model');

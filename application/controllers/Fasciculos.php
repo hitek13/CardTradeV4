@@ -42,4 +42,10 @@ class Fasciculos extends CI_Controller {
         $idUsuario = $_POST['idUsuario'];
         echo json_encode( $this->Buscar_model->getFasciculuosByUser($idUsuario) );
     }
+    public function deleteFasciculo(){
+        $this->load->model('Buscar_model');
+        $idUsuario = $_POST['idUsuario'];
+        $idFasciculo = $_POST['idFasciculo'];
+        echo json_encode( $this->Buscar_model->getFasciculuosByUser($idUsuario, $idFasciculo) );
+    }
 }
