@@ -94,24 +94,16 @@ class Signup_model  extends CI_Model {
             return $query;
     }
     public function getInfo ($idUser){
-        $query = $this->db->query("SELECT Nick, Nombre, Apellidos, Direccion, Ciudad, Pais, Valoracion
+        $query = $this->db->query("SELECT Nick, Valoracion
                                     FROM usuarios
                                     WHERE idUsuario = '".$idUser."';");
         if($query->num_rows() > 0){
             foreach ($query->result_array() as $row)
             {
-                return $row['Nick'].';'.$row['Nombre'].';'.$row['Apellidos'].';'.$row['Direccion'].';'.$row['Ciudad'].';'.$row['Pais'].';'.$row['Valoracion'];
+                return $row['Nick'].';'.$row['Valoracion'];
             }
         }
         else
             return 'No existe el usuario';
-        
-        //return 'Hola, modelo '.$idUser;
-    }
-    public function getLessInfo ($idUser){
-        $query = $this->db->query("SELECT Nick, Valoracion
-                                    FROM usuarios
-                                    WHERE idUser = ".$idUser.";");
-        return 'Hola, modelo '.$idUser;
     }
 }

@@ -64,4 +64,18 @@ class Buscar_model  extends CI_Model {
         }else
             return false;
     }
+    public function getFasciculuosByUser ($idUsuario){
+        $resultados = '';
+        $query = $this->db->query("SELECT f.idFasciculo, c.Nombre, f.Precio, f.Estilo, f.Calidad, f.Cantidad, u.idUsuario
+                                        FROM `fasciculos` AS f, usuarios as u, cartas AS c
+                                        WHERE f.idUsuario = '".$idUsuario."' AND f.Vendido = '0' AND f.idUsuario = u.idUsuario AND c.idCarta = f.idCarta");
+        if( $query->num_rows() > 0){
+            foreach ($query->result_array() as $row)
+            {
+                $resultados .= $row['Nombre'].';'.$row['Estilo'].';'.$row['Calidad'].';'.$row['Cantidad'].';'.$row['Precio'].';'.$row['idFasciculo'].';'.$row['idUsuario'].'|';
+            }
+            return $resultados;
+        }else
+            return false;
+    }
 }

@@ -21,27 +21,132 @@
             success: function(result){
                 cadena = result.split(';');
                 $('#userNick').append(cadena[0]);
-                $('#spanValoracion').append(cadena[6]);
-                nombre = " "+cadena[1];
-                apellido = " "+cadena[2];
-                direc = " "+cadena[3];
-                ciudad = " "+cadena[4];
-                pais = " "+cadena[5];
-                direccion(nombre, apellido, direc, ciudad, pais);
+                $('#spanValoracion').append(cadena[1]);
             },
             error: function(result){
                 console.log(result);
                 alert('Error: '+result);
             }
         });
+        getVentas();
     });
-    function direccion(nombre, apellido, direccion, ciudad, pais){
-        cadena = nombre+' '+apellido+'<br>'+direccion+'<br>'+ciudad+'<br>'+pais;
-        //alert(direccion+" "+ciudad+" "+pais);
-        $('#spanDireccion').append(cadena);
-    }
     function sendMSGuser(){
-        alert($('#textAreaMSG').val());
+        //alert($('#textAreaMSG').val());
+        if( !localStorage.id )
+            alert('Inicia sesión para enviar un mensaje');
+        else{ 
+            var d = new Date($.now());
+            fecha = d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
+            var parametros = {
+                'idReceptor': localStorage.userInfo,
+                'idUser': localStorage.id,
+                'texto': $('#textAreaMSG').val(),
+                'fechaHoy': fecha
+            };
+            $.ajax({
+                data: parametros,
+                type: "POST",
+                url: '<?php echo site_url("Users/sendMsg")?>', // Forma correcta de llamar al controlador
+                dataType: 'json',
+                success: function(result){
+                    alert('Mensaje enviado');
+                    $('#textAreaMSG').val('');
+                },
+                error: function(result){
+                    console.log(result);
+                    alert('Error: '+result);
+                }
+            });
+        }
+    }
+    function getVentas(){
+        var parametros = {
+            'idUsuario': localStorage.userInfo
+        };
+        $.ajax({
+            data: parametros,
+            type: "POST",
+            url: '<?php echo site_url("Fasciculos/showFasciculosByUser")?>', // Forma correcta de llamar al controlador
+            dataType: 'json',
+            success: function(result){
+                if(result){
+                    //alert(result);
+                    fillFasciculos(result);
+                }
+                else
+                    $('#listaVentas').append('No hay fasciculos a la venta');
+            },
+            error: function(result){
+                console.log(result);
+                alert('Error: '+result);
+            }
+        });
+    }
+    function fillFasciculos (cadena){
+        lineFasciculo = cadena.split('|');
+        pelo = '<div class="col-sm-12"> <div class="col-sm-2"><h4>Nombre</h4> </div> <div class="col-sm-2"><h4>Estilo</h4> </div><div class="col-sm-2">    <h4>Calidad</h4></div><div class="col-sm-2">    <h4>Cantidad</h4></div><div class="col-sm-2">    <h4>Precio</h4></div><div class="col-sm-1">    <h4> Comprar </h4></div></div>';
+        $('#listaVentas').append(pelo);
+        cabeza = '<div class="col-sm-12"><div class="col-sm-2"><h3>'; //Nick
+        //cuerpo1 = '</h3></div><div class="col-sm-2"><h3>'; //Estilo
+        cuerpo2 = '</h3></div><div class="col-sm-2"><h3>'; //Calidad
+        cuerpo3 = '</h3></div><div class="col-sm-2"><h4>'; //Cantidad
+        cuerpo4 = '</h4></div><div class="col-sm-2"><h3>'; //Precio
+        cuerpo5 = '€</h3></div><div class="col-sm-2"><p class="btn btn-success btn-lg saldo" id="addSaldo" '; //id's
+
+        pie = '>Comprar <span class="glyphicon glyphicon-eur"></span> </p></div> </div><hr/> <br>';
+        //alert('Llega');
+        for(i=0; i < lineFasciculo.length-1; i++){
+            //alert(i);
+            elementos = lineFasciculo[i].split(';');
+            cuerpo1 = '</h3></div><div class="col-sm-2"><h3>';
+            click = 'name="botonP" onclick="comprarCarta(\''+elementos[5]+'\',\''+elementos[6]+'\' )" ';
+
+            string =cabeza+elementos[0]+cuerpo1+elementos[1]+cuerpo2+elementos[2]+cuerpo3+ construirDesplegable(elementos[3], elementos[5] ) +cuerpo4+elementos[4]+cuerpo5+' '+click+' '+pie;
+            //alert(string);
+            $('#listaVentas').append(string);
+        }
+    }
+    function construirDesplegable (cantidad, idFasciculo){
+        options = '';
+        for(j=1; j < (parseInt(cantidad)+1); j++){
+            options = options + '<option value="'+j+'">'+j+'</option>';
+        }
+        return '<select id=\''+idFasciculo+'\'>'+options+'</select>';
+        //return options;
+    }
+    function comprarCarta (idFasciculo, idUsuario){
+        //alert("Fasciculo: "+idFasciculo+", Usuario: "+idUsuario+" Cantidad: "+$('#'+idFasciculo).val());
+        if( !localStorage.id )
+            alert('Inicia sesión para comprar');
+        else{   
+            var d = new Date($.now());
+                fecha = d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
+            var parametros = {
+                        'idFasciculo': idFasciculo,
+                        'idComprador': localStorage.id,
+                        'idVendedor': idUsuario,
+                        'Cantidad': $('#'+idFasciculo).val(),
+                        'GE': 1.5,
+                        'fecha': fecha
+                    };
+                    //alert('P'+$('#'+idFasciculo).val()+'/ C'+$('#inputCantidad').val()+'/ ')
+                    $.ajax({
+                        data: parametros,
+                        type: "POST",
+                        url: '<?php echo site_url("Transacciones/comprar")?>', // Forma correcta de llamar al controlador
+                        dataType: 'json',
+                        success: function(result){
+                           alert(result);
+                           $('#listaVentas').html('');
+                           getVentas();
+                           //$(location).attr('href', '<?php echo site_url('Busqueda') ?>');
+                        },
+                        error: function(result){
+                            console.log(result);
+                            alert(result);
+                        }
+                    });
+            }
     }
 </script>
 <div class="container formulario">
@@ -51,17 +156,18 @@
             <div class="col-sm-4">
                 <h3><span id="spanValoracion"></span> <span class='glyphicon glyphicon-star-empty'></span></h3>
             </div>
-
-            <label for="inputPassword3" class="col-sm-2 col-form-label"><br>Dirección</label>
-            <div class="col-sm-4">
-                <h3><span id="spanDireccion"></span></h3>
-            </div>
         </div>
     <hr/>
-        <div class="form-group row">
-            <div class="offset-sm-2 col-sm-5">
-                <textarea class='textarea' id='textAreaMSG'></textarea>
-                <button type="button" class="btn navbar-inverse btn-block btn_submit" onclick="sendMSGuser()">Enviar mensaje</button>
-            </div>
+    <section id="listaVentas">
+        
+    </section>
+            <hr/>
+    <div class="col-sm-12"> </div>
+        
+    <div class="form-group row">
+        <div class="offset-sm-2 col-sm-5">
+            <textarea class='textarea' id='textAreaMSG'></textarea>
+            <button type="button" class="btn navbar-inverse btn-block btn_submit" onclick="sendMSGuser()">Enviar mensaje</button>
         </div>
+    </div>
 </div>

@@ -534,7 +534,7 @@
         <section>
             <h4 class="active">Compras activas</h4>
             <ul id="comprasActivas">
-              
+                <div class="col-sm-12">
                     <div class="col-sm-2">
                         <h5>Nombre</h5>
                     </div>
@@ -548,7 +548,7 @@
                         <h5>Gastos de envio</h5>
                     </div>
                     <div class="col-sm-2">
-                        <h5>PrecioTOTAL</h5>
+                        <h5>TOTAL<span class='glyphicon glyphicon-eur'></span></h5>
                     </div>
                     <div class="col-sm-1">
                         <h5>Fecha</h5>
@@ -556,10 +556,12 @@
                     <div class="col-sm-2">
                         <h5>Enviado</h5>
                     </div>
+                </div>
             </ul>
             <h4>Compras finalizadas</h4>
             <ul id="comprasFin">
-                <div class="col-sm-2">
+                <div class="col-sm-12">
+                    <div class="col-sm-2">
                         <h5>Nombre</h5>
                     </div>
                     <div class="col-sm-1">
@@ -567,43 +569,43 @@
                     </div>
                     <div class="col-sm-1">
                         <h5>Precio</h5>
-                    </div>
-                    <div class="col-sm-1">
-                        <h5Gastos de envio</h5>
                     </div>
                     <div class="col-sm-2">
-                        <h5>PrecioTOTAL</h5>
-                    </div>
-                    <div class="col-sm-1">
-                        <h5>Fecha</h5>
-                    </div>
-                    
-            </ul>
-            <h4>Ventas activas</h4>
-            <ul id="ventasActivas">
-                <div class="col-sm-2">
-                        <h5>Nombre</h5>
-                    </div>
-                    <div class="col-sm-1">
-                        <h5>Cantidad</h5>
-                    </div>
-                    <div class="col-sm-1">
-                        <h5>Precio</h5>
-                    </div>
-                    <div class="col-sm-1">
                         <h5>Gastos de envio</h5>
                     </div>
                     <div class="col-sm-2">
-                        <h5>PrecioTOTAL</h5>
+                        <h5>TOTAL <span class='glyphicon glyphicon-eur'></span></h5>
                     </div>
                     <div class="col-sm-1">
                         <h5>Fecha</h5>
                     </div>
+                </div>    
+            </ul>
+            <h4>Ventas activas</h4>
+            <ul id="ventasActivas">
+                <div class="col-sm-12">
+                    <div class="col-sm-2">
+                        <h5>Nombre</h5>
+                    </div>
+                    <div class="col-sm-2">
+                        <h5>Pedido</h5>
+                    </div>
+                    <div class="col-sm-2">
+                        <h5>Direccion</h5>
+                    </div>
+                    <div class="col-sm-2">
+                        <h5>TOTAL<span class='glyphicon glyphicon-eur'></span></h5>
+                    </div>
+                    <div class="col-sm-1">
+                        <h5>Fecha</h5>
+                    </div>
+                </div>
                     
             </ul>
             <h4>Ventas finalizadas</h4>
             <ul id="ventasFin">
-                <div class="col-sm-2">
+                <div class="col-sm-12">
+                    <div class="col-sm-2">
                         <h5>Nombre</h5>
                     </div>
                     <div class="col-sm-1">
@@ -616,12 +618,12 @@
                         <h5>Gastos de envio</h5>
                     </div>
                     <div class="col-sm-2">
-                        <h5>PrecioTOTAL</h5>
+                        <h5>TOTAL<span class='glyphicon glyphicon-eur'></span></h5>
                     </div>
                     <div class="col-sm-1">
                         <h5>Fecha</h5>
                     </div>
-                    
+                </div>    
             </ul>
         </section>
         <!---->

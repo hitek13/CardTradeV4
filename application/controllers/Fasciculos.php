@@ -37,4 +37,9 @@ class Fasciculos extends CI_Controller {
         $idCarta = $_POST['idCarta'];
         echo json_encode( $this->Buscar_model->getFasciculuos($idCarta) );
     }
+    public function showFasciculosByUser(){
+        $this->load->model('Buscar_model');
+        $idUsuario = $_POST['idUsuario'];
+        echo json_encode( $this->Buscar_model->getFasciculuosByUser($idUsuario) );
+    }
 }
