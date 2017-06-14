@@ -34,29 +34,31 @@
         //alert($('#textAreaMSG').val());
         if( !localStorage.id )
             alert('Inicia sesión para enviar un mensaje');
-        else{ 
-            var d = new Date($.now());
-            fecha = d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
-            var parametros = {
-                'idReceptor': localStorage.userInfo,
-                'idUser': localStorage.id,
-                'texto': $('#textAreaMSG').val(),
-                'fechaHoy': fecha
-            };
-            $.ajax({
-                data: parametros,
-                type: "POST",
-                url: '<?php echo site_url("Users/sendMsg")?>', // Forma correcta de llamar al controlador
-                dataType: 'json',
-                success: function(result){
-                    alert('Mensaje enviado');
-                    $('#textAreaMSG').val('');
-                },
-                error: function(result){
-                    console.log(result);
-                    alert('Error: '+result);
-                }
-            });
+        else{
+            if(confirm("Se enviará un mensaje al usuario, ¿desea continuar?")){
+                var d = new Date($.now());
+                fecha = d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
+                var parametros = {
+                    'idReceptor': localStorage.userInfo,
+                    'idUser': localStorage.id,
+                    'texto': $('#textAreaMSG').val(),
+                    'fechaHoy': fecha
+                };
+                $.ajax({
+                    data: parametros,
+                    type: "POST",
+                    url: '<?php echo site_url("Users/sendMsg")?>', // Forma correcta de llamar al controlador
+                    dataType: 'json',
+                    success: function(result){
+                        alert('Mensaje enviado');
+                        $('#textAreaMSG').val('');
+                    },
+                    error: function(result){
+                        console.log(result);
+                        alert('Error: '+result);
+                    }
+                });
+            }
         }
     }
     function getVentas(){
@@ -84,7 +86,7 @@
     }
     function fillFasciculos (cadena){
         lineFasciculo = cadena.split('|');
-        pelo = '<div class="col-sm-12"> <div class="col-sm-2"><h4>Nombre</h4> </div> <div class="col-sm-2"><h4>Estilo</h4> </div><div class="col-sm-2">    <h4>Calidad</h4></div><div class="col-sm-2">    <h4>Cantidad</h4></div><div class="col-sm-2">    <h4>Precio</h4></div><div class="col-sm-1">    <h4> Comprar </h4></div></div>';
+        pelo = '<div class="col-sm-12 hidden-xs"> <div class="col-sm-2"><h4>Nombre</h4> </div> <div class="col-sm-2"><h4>Estilo</h4> </div><div class="col-sm-2">    <h4>Calidad</h4></div><div class="col-sm-2">    <h4>Cantidad</h4></div><div class="col-sm-2">    <h4>Precio</h4></div><div class="col-sm-1">    <h4> Comprar </h4></div></div>';
         $('#listaVentas').append(pelo);
         cabeza = '<div class="col-sm-12"><div class="col-sm-2"><h3>'; //Nick
         //cuerpo1 = '</h3></div><div class="col-sm-2"><h3>'; //Estilo
@@ -166,6 +168,11 @@
         
     <div class="form-group row">
         <div class="offset-sm-2 col-sm-5">
+            <br>
+            <br>
+            <br>
+
+            <h2>Envía un mensaje a este usuario</h2>
             <textarea class='textarea' id='textAreaMSG'></textarea>
             <button type="button" class="btn navbar-inverse btn-block btn_submit" onclick="sendMSGuser()">Enviar mensaje</button>
         </div>

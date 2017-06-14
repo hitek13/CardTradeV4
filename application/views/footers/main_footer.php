@@ -3,15 +3,15 @@
               <div class="hidden-xs">
               <div class="col-md-4 col-lg-4 col-sm-4">
                         <ul class="list-group ">
-                                              <li class="list-group-item">Harzsparkasse</li>
-                                              <li class="list-group-item">BIC: NOLADE21HRZ</li>
+                                              <li class="list-group-item">Creado por</li>
+                                              <li class="list-group-item">Miguel Caballer Royo</li>
 
                                       </ul>
                               </div>
                               <div class="col-md-4 col-lg-4 col-sm-4 ">
                                       <ul class="list-group">
-                                              <li class="list-group-item">Harzer Volksbank</li>
-                                              <li class="list-group-item">BIC: GENODEF1QLB</li>
+                                              <li class="list-group-item"></li>
+                                              <li class="list-group-item"></li>
                                       </ul>
                               </div>
 

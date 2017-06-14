@@ -24,12 +24,49 @@ class Buscar_model  extends CI_Model {
     public function buscarCartas($carta){
 
         $resultados = '';
-        $query = $this->db->query("SELECT Nombre, idCarta FROM cartas WHERE Nombre LIKE '%".$carta."%'");
+        $query = $this->db->query("SELECT Nombre, idCarta, Imagen FROM cartas WHERE Nombre LIKE '%".$carta."%'");
 
         if( $query->num_rows() > 0){
             foreach ($query->result_array() as $row)
             {
-                $resultados .= $row['Nombre'].';'.$row['idCarta'].'|';
+                $resultados .= $row['Nombre'].';'.$row['idCarta'].';'.$row['Imagen'].'|';
+            }
+            return $resultados;
+        }else
+            return false;
+
+    }
+    public function buscarAvanzada($edicion, $costeMc,$relCMC, $atk, $relAtk, $def, $relDef){
+        $sqledicion = ''; $sqlcmc = ''; $sqlatk = ''; $sqldef = '';
+       /*
+        if($edicion){$sqledicion = 'AND Edicion = "'.$edicion.'"';}
+        if($costeMc){$sqlcmc = 'AND CMC '.$relCMC.' '.$costeMc;}
+        if($atk){$sqlatk = 'AND CMC '.$relAtk.' '.$atk;}
+        if($def){$sqldef = 'AND CMC '.$relDef.' '.$def;}
+        */
+        //return 'Hola';
+        $resultados = '';
+        $query = $this->db->query("SELECT Nombre, idCarta, Imagen FROM cartas WHERE 1  ".$sqledicion." ".$sqlcmc." ".$sqlatk." ".$sqldef." ;");
+
+        if( $query->num_rows() > 0){
+            foreach ($query->result_array() as $row)
+            {
+                $resultados .= $row['Nombre'].';'.$row['idCarta'].';'.$row['Imagen'].'|';
+            }
+            return $resultados;
+        }else
+            return false;
+
+    }
+    public function getImage($carta){
+
+        $resultados = '';
+        $query = $this->db->query("SELECT Imagen FROM cartas WHERE idCarta = '".$carta."';");
+
+        if( $query->num_rows() > 0){
+            foreach ($query->result_array() as $row)
+            {
+                $resultados .= $row['Imagen'];
             }
             return $resultados;
         }else

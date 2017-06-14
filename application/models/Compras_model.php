@@ -88,13 +88,14 @@ class Compras_model   extends CI_Model {
     }
     public function getComprasActivas ($idUsuario){
         $cadena = '';              ///          0       1               2       3           4               5       6           7               8               
-        $query = $this->db->query("SELECT t.idVenta, t.idVendedor, u.Nick, t.gastoEnvio, t.Cantidad, t.FecVenta, t.Enviado, t.Precio, t.PrecioTOTAL
-                                   FROM `transacciones` AS t, usuarios AS u
-                                   WHERE idComprador = '".$idUsuario."' AND t.idVendedor = u.idUsuario AND t.Recibido = 0;");
+        $query = $this->db->query("SELECT t.idVenta, t.idVendedor, u.Nick, t.gastoEnvio, t.Cantidad, t.FecVenta, t.Enviado, t.Precio, t.PrecioTOTAL, c.Nombre AS nomCarta, f.Estilo, f.Calidad
+                                   FROM `transacciones` AS t, usuarios AS u, cartas AS c, fasciculos AS f
+                                   WHERE idComprador = '".$idUsuario."' AND t.idVendedor = u.idUsuario AND f.idFasciculo = t.idFasciculo AND c.idCarta = f.idCarta AND  t.Recibido = 0;");
         if($query->num_rows() > 0 ){
             foreach ($query->result_array() as $row)
-                {
-                 $cadena .= $row['idVenta'].';'.$row['idVendedor'].';'.$row['Nick'].';'.$row['gastoEnvio'].';'.$row['Cantidad'].';'.$row['FecVenta'].';'.$row['Enviado'].';'.$row['Precio'].';'.$row['PrecioTOTAL'].'|';
+                {               /// 1                       2                   3           3               4                   5                       6                 7                 8                       
+                 $pedido = $row['nomCarta'].'<br>'.$row['Estilo'].' x'.$row['Cantidad'].'<br>'.$row['gastoEnvio'].'€';
+                 $cadena .= $row['idVenta'].';'.$row['idVendedor'].';'.$row['Nick'].';'.$pedido.';'.$row['Cantidad'].';'.$row['FecVenta'].';'.$row['Enviado'].';'.$row['Precio'].';'.$row['PrecioTOTAL'].'|';
                 }
             return $cadena;
         }else{
@@ -103,13 +104,14 @@ class Compras_model   extends CI_Model {
     }
     public function getComprasFin ($idUsuario){
         $cadena = '';              ///          0       1               2       3           4               5       6           7               8               
-        $query = $this->db->query("SELECT t.idVenta, t.idVendedor, u.Nick, t.gastoEnvio, t.Cantidad, t.FecVenta, t.Enviado, t.Precio, t.PrecioTOTAL, t.Recibido
-                                   FROM `transacciones` AS t, usuarios AS u
-                                   WHERE idComprador = '".$idUsuario."' AND t.idVendedor = u.idUsuario AND t.Recibido = 1;");
+        $query = $this->db->query("SELECT t.idVenta, t.idVendedor, u.Nick, t.gastoEnvio, t.Cantidad, t.FecVenta, t.Enviado, t.Precio, t.PrecioTOTAL, t.Recibido, c.Nombre AS nomCarta, f.Estilo, f.Calidad
+                                   FROM `transacciones` AS t, usuarios AS u, cartas AS c, fasciculos AS f
+                                   WHERE idComprador = '".$idUsuario."' AND t.idVendedor = u.idUsuario AND f.idFasciculo = t.idFasciculo AND c.idCarta = f.idCarta AND t.Recibido = 1;");
         if($query->num_rows() > 0 ){
             foreach ($query->result_array() as $row)
                 {
-                 $cadena .= $row['idVenta'].';'.$row['idVendedor'].';'.$row['Nick'].';'.$row['gastoEnvio'].';'.$row['Cantidad'].';'.$row['FecVenta'].';'.$row['Enviado'].';'.$row['Precio'].';'.$row['PrecioTOTAL'].';'.$row['Recibido'].'|';
+                 $pedido = $row['nomCarta'].'<br>'.$row['Estilo'].' x'.$row['Cantidad'].'<br>'.$row['gastoEnvio'].'€';
+                 $cadena .= $row['idVenta'].';'.$row['idVendedor'].';'.$row['Nick'].';'.$pedido.';'.$row['Cantidad'].';'.$row['FecVenta'].';'.$row['Enviado'].';'.$row['Precio'].';'.$row['PrecioTOTAL'].';'.$row['Recibido'].'|';
                 }
             return $cadena;
         }else{
@@ -150,12 +152,21 @@ class Compras_model   extends CI_Model {
             return 'No hay compras finalizadas';
         }
     }
-    public function setRecibido ($idVenta){
+    public function setRecibido ($idVenta, $idUsuario, $valoracion){
         $total = 0;
-        
+        $valoracionAnterior = NULL;
         $queryTOTAL = $this->db->query("SELECT PrecioTOTAL, idVendedor
                                     FROM transacciones   
                                     WHERE idVenta = '".$idVenta."'; ");
+        $queryValoracionAnterior = $this->db->query("SELECT Valoracion
+                                                        FROM usuarios
+                                                        WHERE idUsuario = '".$idUsuario."';");
+        if($queryValoracionAnterior->num_rows() > 0 ){
+            foreach ($queryValoracionAnterior->result_array() as $row)
+                {
+                $valoracionAnterior = $row['Valoracion'];
+                }
+        }
         if($queryTOTAL->num_rows() > 0 ){
             foreach ($queryTOTAL->result_array() as $row)
                 {
@@ -165,9 +176,16 @@ class Compras_model   extends CI_Model {
             $updateSaldoAdmin = $this->db->query("UPDATE usuarios 
                                                 SET Saldo = Saldo - ".(floatval($total)*0.95)."
                                                 WHERE idUsuario = '593418dc89481' ");
-            $updateSaldo = $this->db->query("UPDATE usuarios 
-                                                SET Saldo = Saldo + ".(floatval($total)*0.95)."
-                                                WHERE idUsuario = '".$idVendedor."' ");
+            if($valoracionAnterior == NULL){
+                $updateSaldo = $this->db->query("UPDATE usuarios 
+                                                 SET Saldo = Saldo + ".(floatval($total)*0.95)." , Valoracion = ".$valoracion."
+                                                 WHERE idUsuario = '".$idVendedor."' ");
+                //return 'hola:'.$valoracionAnterior;
+            }else{
+               $updateSaldo = $this->db->query("UPDATE usuarios 
+                                                SET Saldo = Saldo + ".(floatval($total)*0.95).", Valoracion = (Valoracion + ".$valoracion.")/2
+                                                WHERE idUsuario = '".$idVendedor."' ;"); 
+            }
             $query = $this->db->query("UPDATE transacciones 
                                     SET Recibido = 1
                                     WHERE idVenta = '".$idVenta."'; ");

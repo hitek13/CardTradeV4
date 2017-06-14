@@ -17,7 +17,7 @@ class Signup_model  extends CI_Model {
 
         $query = $this->db->query("INSERT INTO usuarios
                                   (idUsuario, Nick, Email, Pass, Nombre, Apellidos, Direccion, Pais, Ciudad, DNI, fechaNac)
-                                  VALUES ('".uniqid()."', '".$Nick."', '".$email."', '".$Nombre."', '".$Pass."',
+                                  VALUES ('".uniqid()."', '".$Nick."', '".$email."', '".$Pass."', '".$Nombre."',
                                    '".$Apell."', '".$Direc ."', '".$Pais."', '".$Ciudad."', '".$DNI."', '".$fecha ."');");
 
         return 'Inserción correcta '.$Pass;
@@ -25,13 +25,13 @@ class Signup_model  extends CI_Model {
     public function LogIn ($Nick, $Pass){
         $query = $this->db->query("SELECT idUsuario FROM usuarios WHERE Nick LIKE '".$Nick."' AND Pass LIKE '".$Pass."';");
 
-        if($query->num_rows() == 1)
+        if($query->num_rows() > 0)
             foreach ($query->result_array() as $row)
             {
                 return $row['idUsuario'];
             }
         else
-            return 'No existe el usuario, o la contraseña es erronea';
+            return false;
     }
     public function userInfo ($Nick, $idUser){
 
@@ -105,5 +105,12 @@ class Signup_model  extends CI_Model {
         }
         else
             return 'No existe el usuario';
+    }
+    public function setMoney($idUsuario, $money){
+        $query = $this->db->query("UPDATE usuarios 
+                                    SET Saldo = (Saldo+".floatval($money).")
+                                    WHERE idUsuario = '".$idUsuario."' 
+                                    ;");
+        return 'Saldo añadido.';
     }
 }

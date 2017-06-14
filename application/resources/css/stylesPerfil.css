@@ -159,3 +159,10 @@ section .active {
 section .active + ul {
     display: block;
 }
+.inLineItem{
+    display: inline;
+}
+.ajustar{
+    /* QUITAR */
+    /*height: 400px;*/
+}

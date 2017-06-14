@@ -60,8 +60,15 @@ class Users extends CI_Controller {
         echo json_encode($this->Signup_model->sendMsg($idUser, $idReceptor, $fecha, $texto));
     }
     public function getInfo(){
-    $this->load->model('Signup_model');
-    $idUser = $_POST['idUser'];
-    echo json_encode($this->Signup_model->getInfo($idUser));
+        $this->load->model('Signup_model');
+        $idUser = $_POST['idUser'];
+        echo json_encode($this->Signup_model->getInfo($idUser));
+    }
+    public function addMoney(){
+        $this->load->model('Signup_model');
+        $idUsuario = $_POST['idUser'];
+        $dinero = $_POST['money'];
+        echo json_encode($this->Signup_model->setMoney($idUsuario, $dinero));
+        //echo json_encode('Hola, controller'.$idUser.$money);
     }
 }

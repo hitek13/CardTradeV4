@@ -1,7 +1,7 @@
 <link rel="stylesheet" type="text/css" href="<?php echo base_url(); ?>application/resources/css/stylesSign_up.css">
 <script>
 $(document).ready(function(){
-    
+    imagen ();
     var parametros = {
                 'idCarta': localStorage.cartaBuscada
             };
@@ -27,36 +27,59 @@ $(document).ready(function(){
     $('#addFasciculo').on('click', function (){
         if( !localStorage.id )
             alert('Inicia sesión para vender');
-        else{   
-            var parametros = {
-                'idCarta': localStorage.cartaBuscada,
-                'idUsuario': localStorage.id,
-                'Precio': $('#inputPrecio').val(),
-                'Cantidad': $('#inputCantidad').val(),
-                'Estilo': $('input[name=optradio]:checked', '#radioEstilo').val(),
-                'Calidad': $('input[name=optradio1]:checked', '#radioCalidad').val()
-            };
-            $.ajax({
-                data: parametros,
-                type: "POST",
-                url: '<?php echo site_url("Fasciculos/addFasciculo")?>', // Forma correcta de llamar al controlador
-                dataType: 'json',
-                success: function(result){
-                    if(result){
-                        alert('Se ha añadido el fasciculo');
-                        $(location).attr('href', '<?php echo site_url('Busqueda') ?>');
+        else{
+            if(confirm("Se añadirá el artículo en venta, ¿desea continuar?")){
+                var parametros = {
+                    'idCarta': localStorage.cartaBuscada,
+                    'idUsuario': localStorage.id,
+                    'Precio': $('#inputPrecio').val(),
+                    'Cantidad': $('#inputCantidad').val(),
+                    'Estilo': $('input[name=optradio]:checked', '#radioEstilo').val(),
+                    'Calidad': $('input[name=optradio1]:checked', '#radioCalidad').val()
+                };
+                $.ajax({
+                    data: parametros,
+                    type: "POST",
+                    url: '<?php echo site_url("Fasciculos/addFasciculo")?>', // Forma correcta de llamar al controlador
+                    dataType: 'json',
+                    success: function(result){
+                        if(result){
+                            alert('Se ha añadido el fasciculo');
+                            $(location).attr('href', '<?php echo site_url('Busqueda') ?>');
+                        }
+                        else
+                            alert('¿No tienes ya esta carta en venta?')
+                    },
+                    error: function(result){
+                        console.log(result);
+                        alert('¿No has introducido ya esta carta?');
                     }
-                    else
-                        alert('¿No tienes ya esta carta en venta?')
-                },
-                error: function(result){
-                    console.log(result);
-                    alert('¿No has introducido ya esta carta?');
-                }
-            });
+                });
+            }
         }
     });
 });
+function imagen (){
+//alert(localStorage.cartaBuscada);
+var parametros = {
+    'Carta': localStorage.cartaBuscada
+};
+$.ajax({
+    data: parametros,
+    type: "POST",
+    url: '<?php echo site_url("Busqueda/imagen")?>', // Forma correcta de llamar al controlador
+    dataType: 'json',
+    success: function(result){
+       cadena = '<img src="<?php echo base_url(); ?>application/resources/cartas/'+result+'" alt="Avatar" style="width:250px">';
+       $('#imageCardDiv').append(cadena);
+       //$('#imageCard').attr('src', '<?php //echo base_url(); ?>application/resources/cartas/PR2015-031.jpg';);
+       //alert(result);
+    },
+    error: function(result){
+        alert('Error:'+result);
+    }
+});
+}
 function fillFasciculos (cadena){
     lineFasciculo = cadena.split('|');
     cabeza = '<div class="col-sm-2"><h3>'; //Nick
@@ -83,33 +106,35 @@ function comprarCarta (idFasciculo, idUsuario){
     //alert("Fasciculo: "+idFasciculo+", Usuario: "+idUsuario+" Cantidad: "+$('#'+idFasciculo).val());
     if( !localStorage.id )
         alert('Inicia sesión para comprar');
-    else{   
-        var d = new Date($.now());
-            fecha = d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
-        var parametros = {
-                    'idFasciculo': idFasciculo,
-                    'idComprador': localStorage.id,
-                    'idVendedor': idUsuario,
-                    'Cantidad': $('#'+idFasciculo).val(),
-                    'GE': 1.5,
-                    'fecha': fecha
-                };
-                //alert('P'+$('#'+idFasciculo).val()+'/ C'+$('#inputCantidad').val()+'/ ')
-                $.ajax({
-                    data: parametros,
-                    type: "POST",
-                    url: '<?php echo site_url("Transacciones/comprar")?>', // Forma correcta de llamar al controlador
-                    dataType: 'json',
-                    success: function(result){
-                       alert(result);
-                       $(location).attr('href', '<?php echo site_url('Busqueda') ?>');
-                    },
-                    error: function(result){
-                        console.log(result);
-                        alert(result);
-                    }
-                });
+    else{
+        if(confirm("Está a punto de iniciar una compra, ¿desea continuar?")){
+            var d = new Date($.now());
+                fecha = d.getFullYear()+'-'+d.getMonth()+'-'+d.getDate()+' '+d.getHours()+':'+d.getMinutes()+':'+d.getSeconds();
+            var parametros = {
+                        'idFasciculo': idFasciculo,
+                        'idComprador': localStorage.id,
+                        'idVendedor': idUsuario,
+                        'Cantidad': $('#'+idFasciculo).val(),
+                        'GE': 1.5,
+                        'fecha': fecha
+                    };
+                    //alert('P'+$('#'+idFasciculo).val()+'/ C'+$('#inputCantidad').val()+'/ ')
+                    $.ajax({
+                        data: parametros,
+                        type: "POST",
+                        url: '<?php echo site_url("Transacciones/comprar")?>', // Forma correcta de llamar al controlador
+                        dataType: 'json',
+                        success: function(result){
+                           alert(result);
+                           $(location).attr('href', '<?php echo site_url('Busqueda') ?>');
+                        },
+                        error: function(result){
+                            console.log(result);
+                            alert(result);
+                        }
+                    });
         }
+    }
 }
 function construirDesplegable (cantidad, idFasciculo){
     options = '';
@@ -123,8 +148,8 @@ function construirDesplegable (cantidad, idFasciculo){
 
 <div class="container formulario">
     <div class="form-group row">
-            <div class="col-sm-6">
-                <img src="<?php echo base_url(); ?>application/resources/images/img_avatar2.png" alt="Avatar" style="width:250px; height: 350px;">
+            <div class="col-sm-6" id="imageCardDiv">
+               
             </div>
         <div class="col-sm-6 fasciculo">
                 <label for="inputNick" class="col-sm-2 col-form-label">Precio</label>

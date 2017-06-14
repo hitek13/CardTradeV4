@@ -38,19 +38,19 @@
     });
 </script>
 <div class="container formulario">
-    <h1>Log In!</h1>
+    <h1>¡Entra!</h1>
     <form>
         <div class="form-group row">
-            <label for="inputNick" class="col-sm-2 col-form-label">Nick</label>
+            <label for="inputNick" class="col-sm-2 col-form-label">Nombre</label>
             <div class="col-sm-10">
-                <input type="text" class="form-control" id="inputNick" placeholder="Nick">
+                <input type="text" class="form-control" id="inputNick" placeholder="Nombre">
                 <span id="spanNick"></span>
             </div>
         </div>
         <div class="form-group row">
-            <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
+            <label for="inputPassword3" class="col-sm-2 col-form-label">Contraseña</label>
             <div class="col-sm-10">
-                <input type="password" class="form-control" id="inputPassword" placeholder="Password">
+                <input type="password" class="form-control" id="inputPassword" placeholder="Contraseña">
                 <span id="spanPass"></span>
             </div>
         </div>

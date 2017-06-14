@@ -13,6 +13,8 @@
         
         $("#userNickTitle").text(localStorage.Nick);
         $("#userNick").text(localStorage.Nick);
+        localStorage.removeItem('idNota');
+        localStorage.removeItem('nota');
         cargarUsuarios();
         cargarComprasActivas();
         cargarComprasFin();
@@ -131,7 +133,7 @@
     function addUser (id, nick){
         test = "<h4>What?</h4><ul><li>Potius inflammat, ut coercendi magis quam dedocendi esse videantur.</li><li>Atqui reperies, inquit, in hoc quidem pertinacem;</li><li>Verba tu fingas et ea dicas, quae non sentias?</li></ul>"
         cabeza = '<h4 id='+id+' onclick="active(this)" >';
-        cuerpo1 = "</h4><ul><!-- MENSAJES--><!-- MENSAJES--><!--TEXTO--><textarea class='textarea' id='text";
+        cuerpo1 = "</h4><ul><!-- MENSAJES--><!-- MENSAJES--><!--TEXTO--><textarea class='textarea' onkeypress='noSpecial(event)' id='text";
         cuerpo2 = "'></textarea><button type='button' class='btn navbar-inverse btn-block btn_submit'";
         click = "onclick=addMSG('"+id+"') ";
         pie = ">Enviar</button><!--TEXTO--></ul>";
@@ -243,11 +245,11 @@
     function crearCompra(cadena){
         ventas = cadena.split('|');
         cabeza = '<div class="col-sm-12"><div class="col-sm-2"><h3>';
-        cuerpo2 = '</h3></div><div class="col-sm-1"><h3>';
-        cuerpo3 = '</h3></div><div class="col-sm-1"><h3>';
-        cuerpo4 = '</h3></div><div class="col-sm-1"><h3>';
-        cuerpo5 = '</h3></div><div class="col-sm-3"><h5><br>';
-        cuerpo6 = '</h5></div><div class="col-sm-1"><h3>';
+        cuerpo2 = '</h5></div><div class="col-sm-1"><h3>';
+        cuerpo3 = '</h3></div><div class="col-sm-1"><h5>';
+        cuerpo4 = '</h5></div><div class="col-sm-1"><h5>';
+        cuerpo5 = '</h5></div><div class="col-sm-1"><h5><br>';
+        //cuerpo6 = '</h5></div><div class="col-sm-1"><h3>';
         pie = '<div class="col-sm-12"><br></div>';
         check = '<span class="glyphicon glyphicon-check"></span>';
         nocheck = '<span class="glyphicon glyphicon-unchecked"></span>';
@@ -257,59 +259,81 @@
             //alert('Llega');
             //string = 'Hola';
             datos = ventas[i].split(';');
-            cuerpo1 = ' <span class="glyphicon glyphicon-envelope" onclick="verUserInfo(\''+datos[1]+'\')"></span></h3></div><div class="col-sm-1"><h3>';
-        
-            cuerpo7 = '</h3></div><div class="col-sm-1"><p class="btn btn-success btn-lg saldo" id="addSaldo" onclick="compraFinalizada (\''+datos[0]+'\')"> Recibido <span class="glyphicon glyphicon-ok"></span> </p></div></div><hr/>';
+            cuerpo1 = ' <span class="glyphicon glyphicon-user" onclick="verUserInfo(\''+datos[1]+'\')"></span></h3></div><div class="col-sm-2"><h5>';
+            
+            desplegable = '<select onclick="puntuar(this, \''+datos[1]+'\')"><option>Valoración</option><option value="1">1</option><option value="2">2</option> <option value="3">3</option><option value="4">4</option> <option value="5">5</option><option value="6">6</option> <option value="7">7</option> <option value="8">8</option><option value="9">9</option> <option value="10">10</option> </select>';
+            
+            cuerpo6 = '</h5></div><div class="col-sm-2"><br>'+desplegable+'</div><div class="col-sm-2"><h3>';
+            cuerpo7 = '</h3></div><div class="col-sm-1"><p class="btn btn-success btn-lg saldo" onclick="compraFinalizada (\''+datos[0]+'\', \''+datos[1]+'\')"> Recibido <span class="glyphicon glyphicon-ok"></span> </p></div></div><hr/>';
+            
             //alert(datos[2]);
             if(datos[6] == 1)
                 result = check;
-            string = cabeza+datos[2]+cuerpo1+datos[4]+cuerpo2+datos[7]+cuerpo3+datos[3]+cuerpo4+datos[8]+cuerpo5+datos[5]+cuerpo6+result+cuerpo7;
+            string = cabeza+datos[2]+cuerpo1+datos[3]+cuerpo2+datos[8]+cuerpo3+datos[5]+cuerpo6+result+cuerpo7;
             $('#comprasActivas').append(string);
             //alert(string);
         }
         $('#comprasActivas').append(pie);
     }
-    function compraFinalizada (idVenta){
+    function puntuar(objet, idUser){
+        //alert(idUser);
+        localStorage.setItem("idNota", idUser);
+        //alert($(objet).val());
+        localStorage.setItem("nota", $(objet).val());
+
+    }
+    function compraFinalizada (idVenta, idVendedor){
         //alert('Compra realizada '+ idVenta);
-        var parametros = {
-            'idVenta': idVenta
-        };
-        $.ajax({
-            data: parametros,
-            type: "POST",
-            url: '<?php echo site_url("Transacciones/recibido")?>', // Forma correcta de llamar al controlador
-            dataType: 'json',
-            success: function(resultado){
-                alert(resultado);
-                $(location).attr('href', '<?php echo site_url('Main/perfil') ?>');
-                //crearCompraFin(resultado)
-            },
-            error: function(resultado){
-                console.log(resultado);
-                alert('Error: '+resultado);
+        //alert(localStorage.idNota + " "+ localStorage.nota);
+        if(localStorage.nota){
+            if(confirm("¿Confirmar?")){
+                var parametros = {
+                    'idVenta': idVenta,
+                    'idUser': localStorage.idNota,
+                    'nota': localStorage.nota
+                };
+                $.ajax({
+                    data: parametros,
+                    type: "POST",
+                    url: '<?php echo site_url("Transacciones/recibido")?>', // Forma correcta de llamar al controlador
+                    dataType: 'json',
+                    success: function(resultado){
+                        alert(resultado);
+                        $(location).attr('href', '<?php echo site_url('Main/perfil') ?>');
+                        //crearCompraFin(resultado)
+                    },
+                    error: function(resultado){
+                        console.log(resultado);
+                        alert('Error: '+resultado);
+                    }
+                });
             }
-        });
+        }else{
+            alert('Dale una nota al vendedor.');
+        }
     }
     function envioFinalizado (idVenta){
         //alert('Envio realizado'+ idVenta);
-        var parametros = {
-            'idVenta': idVenta
-        };
-        $.ajax({
-            data: parametros,
-            type: "POST",
-            url: '<?php echo site_url("Transacciones/enviado")?>', // Forma correcta de llamar al controlador
-            dataType: 'json',
-            success: function(resultado){
-                alert(resultado);
-                $(location).attr('href', '<?php echo site_url('Main/perfil') ?>');
-                //crearCompraFin(resultado)
-            },
-            error: function(resultado){
-                console.log(resultado);
-                alert('Error: '+resultado);
-            }
-        });
+        if(confirm("¿Confirmar?")){
+            var parametros = {
+                'idVenta': idVenta
+            };
+            $.ajax({
+                data: parametros,
+                type: "POST",
+                url: '<?php echo site_url("Transacciones/enviado")?>', // Forma correcta de llamar al controlador
+                dataType: 'json',
+                success: function(resultado){
+                    alert(resultado);
+                    $(location).attr('href', '<?php echo site_url('Main/perfil') ?>');
+                    //crearCompraFin(resultado)
+                },
+                error: function(resultado){
+                    console.log(resultado);
+                    alert('Error: '+resultado);
+                }
+            });
+        }
     }
     function cargarComprasFin() {
         var parametros = {
@@ -374,20 +398,20 @@
 
         cuerpo2 = '</h3></div><div class="col-sm-2"><h3>';
         cuerpo3 = '</h3></div><div class="col-sm-1"><h3>';
-        cuerpo4 = '</h3></div><div class="col-sm-1"><h3>';
+        cuerpo4 = '</h5></div><div class="col-sm-2"><h3>';
         cuerpo5 = '</h3></div><div class="col-sm-2"><h5><br>';
-        cuerpo6 = '</h5></div><div class="col-sm-1"><h5>';
-        cuerpo8 = '</h5></div><div class="col-sm-1"><h5>';
+        cuerpo6 = '</h5></div><div class="col-sm-2 inLineItem"><h5>';
+        cuerpo8 = '</h5></div><div class="col-sm-2 inLineItem"><h5>';
         cuerpo7 = '</h5></div><hr/>';
-        check = '<span class="glyphicon glyphicon-check"></span>';
-        pie = '<div class="col-sm-12"><br></div><hr/></div>';
+        check = '<h3><span class="glyphicon glyphicon-check"></span></h3>';
+        pie = '<div class="col-sm-12"><br></div></div>';
         for(i=0; i < ventas.length-1; i++){
             //alert('Llega');
             //string = 'Hola';
             datos = ventas[i].split(';');
-            cuerpo1 = ' <span class="glyphicon glyphicon-envelope" onclick="verUserInfo(\''+datos[1]+'\')"></span></h3></div><div class="col-sm-1"><h3>';
+            cuerpo1 = ' <span class="glyphicon glyphicon-user" onclick="verUserInfo(\''+datos[1]+'\')"></span></h3></div><div class="col-sm-2"><h5>';
             //alert(datos[2]);
-            string = cabeza+datos[2]+cuerpo1+datos[4]+cuerpo2+datos[7]+cuerpo3+datos[3]+cuerpo4+datos[8]+cuerpo5+datos[5]+cuerpo6+'Enviado'+check+cuerpo8+'Recibido'+check+cuerpo7;
+            string = cabeza+datos[2]+cuerpo1+datos[3]+cuerpo4+datos[8]+cuerpo5+datos[5]+cuerpo6+'Enviado'+check+cuerpo8+'Recibido'+check+cuerpo7;
             $('#comprasFin').append(string);
             //alert(string);
         }
@@ -401,14 +425,14 @@
         cuerpo4 = '</h3></div><div class="col-sm-1"><h3>';
         cuerpo5 = '</h3></div><div class="col-sm-2"><h5><br>';
         cuerpo6 = '</h5></div><div class="col-sm-1"><h5>';
-        check = '<div class="col-sm-1"><span class="glyphicon glyphicon-check"></span></div></div><hr/>';
+        check = '<div class="col-sm-1"><span class="glyphicon glyphicon-check"></span></div></div>';
         //nocheck = '<span class="glyphicon glyphicon-unchecked"></span>';
-        pie = '<div class="col-sm-12"><br></div><hr/></div><hr/>';
+        pie = '<div class="col-sm-12"><br></div><hr/></div>';
         for(i=0; i < ventas.length-1; i++){
             //alert('Llega');
             //string = 'Hola';
             datos = ventas[i].split(';');
-            cuerpo1 = ' <span class="glyphicon glyphicon-envelope" onclick="verUserInfo(\''+datos[1]+'\')"></span></h3></div><div class="col-sm-2"><h5>';
+            cuerpo1 = ' <span class="glyphicon glyphicon-user" onclick="verUserInfo(\''+datos[1]+'\')"></span></h3></div><div class="col-sm-2"><h5>';
             cuerpo7 = '</h3></div><div class="col-sm-1"><p class="btn btn-success btn-lg saldo" id="addSaldo" onclick="envioFinalizado(\''+datos[0]+'\')"> Enviado <span class="glyphicon glyphicon-ok"></span> </p></div></div><hr/>';
             //alert(datos[2]);
             if(datos[6] == 1)
@@ -435,7 +459,7 @@
             //alert('Llega');
             //string = 'Hola';
             datos = ventas[i].split(';');
-            cuerpo1 = ' <span class="glyphicon glyphicon-envelope" onclick="verUserInfo(\''+datos[1]+'\')"></span></h3></div><div class="col-sm-2"><h5>';
+            cuerpo1 = ' <span class="glyphicon glyphicon-user" onclick="verUserInfo(\''+datos[1]+'\')"></span></h3></div><div class="col-sm-2"><h5>';
             //alert(datos[2]);
             string = cabeza+datos[2]+cuerpo1+datos[4]+cuerpo2+datos[7]+cuerpo3+datos[3]+cuerpo4+datos[8]+cuerpo5+datos[5]+cuerpo6+'Enviado'+check+cuerpo8+'Recibido'+check+cuerpo7;
             $('#ventasFin').append(string);
@@ -458,7 +482,7 @@
                     fillFasciculos(result);
                 }
                 else
-                    $('#misOfertas').append('No hay fasciculos a la venta');
+                    $('#misOfertas').append('<h2>No hay fascículos a la venta.</h2>');
             },
             error: function(result){
                 console.log(result);
@@ -480,7 +504,7 @@
         pie = '>Borrar <span class="glyphicon glyphicon-remove"></span> </p></div> </div><hr/> <br>';
         //alert('Llega');
         $('#misOfertas').append('<div class="col-sm-12"></div>');
-        $('#misOfertas').append('<div class="col-sm-2"><h5>Nombre</h5></div><div class="col-sm-2"><h5>Estilo</h5></div><div class="col-sm-2"><h5>Calidad</h5></div><div class="col-sm-2"><h5>Cantidad</h5></div><div class="col-sm-2"><h5>Precio</h5></div>');
+        $('#misOfertas').append('<div class="col-sm-12 hidden-xs"><div class="col-sm-2"><h5>Nombre</h5></div><div class="col-sm-2"><h5>Estilo</h5></div><div class="col-sm-2"><h5>Calidad</h5></div><div class="col-sm-2"><h5>Cantidad</h5></div><div class="col-sm-2"><h5>Precio</h5></div></div>');
         for(i=0; i < lineFasciculo.length-1; i++){
             //alert(i);
             elementos = lineFasciculo[i].split(';');
@@ -494,23 +518,28 @@
         $('#misOfertas').append('<div class="col-sm-12"><br></div>');
     }
     function borrarVenta(fasciculo, usuario){
-        var parametros = {
-            'idUsuario': usuario,
-            'idFasciculo': fesciculo
-        };
-        $.ajax({
-            data: parametros,
-            type: "POST",
-            url: '<?php echo site_url("Fasciculos/deleteFasciculo")?>', // Forma correcta de llamar al controlador
-            dataType: 'json',
-            success: function(result){
-                alert(result);
-            },
-            error: function(result){
-                console.log(result);
-                alert('Error: '+result);
-            }
-        });
+        if(confirm("¿Desea quitar de la venta este articulo?")){
+            var parametros = {
+                'idUsuario': usuario,
+                'idFasciculo': fasciculo
+            };
+            $.ajax({
+                data: parametros,
+                type: "POST",
+                url: '<?php echo site_url("Fasciculos/deleteFasciculo")?>', // Forma correcta de llamar al controlador
+                dataType: 'json',
+                success: function(result){
+                    alert(result);
+                },
+                error: function(result){
+                    console.log(result);
+                    alert('Error: '+result);
+                }
+            });
+        }
+    }
+    function addSaldo(){
+        $(location).attr('href', '<?php echo site_url('Main/addMoney') ?>');
     }
 </script>
 
@@ -531,7 +560,7 @@
                 <h3><span id="spanSaldo"></span></h3>
             </div>
             <div class="col-sm-5">
-                <p class="btn btn-primary btn-lg saldo" id="addSaldo"> Añadir saldo <span class='glyphicon glyphicon-eur'></span> </p>
+                <p class="btn btn-primary btn-lg saldo" id="addSaldo" onclick="addSaldo()"> Añadir saldo <span class='glyphicon glyphicon-eur'></span> </p>
             </div>
         </div>
         <div class="form-group row">
@@ -587,11 +616,13 @@
 <!--        <span id='userNick' style="font-size: 250%;">Mensajes</span>
         <hr/>-->
         <!---->
+        <div class="ajustar">
         <section id="usuariosMsg">
             <h4 class="active">Mensajes</h4>
             <ul>
             </ul>
         </section>
+        </div>
         <!---->
         <div class="form-group row">
             <div class="col-sm-10">
@@ -618,47 +649,32 @@
         <section>
             <h4>Compras activas</h4>
             <ul id="comprasActivas">
-                <div class="col-sm-12">
+                 <div class="col-sm-12 hidden-xs">
                     <div class="col-sm-2">
                         <h5>Nombre</h5>
                     </div>
-                    <div class="col-sm-1">
-                        <h5>Cantidad</h5>
-                    </div>
-                    <div class="col-sm-1">
-                        <h5>Precio</h5>
-                    </div>
-                    <div class="col-sm-1">
-                        <h5>Gastos de envio</h5>
-                    </div>
                     <div class="col-sm-2">
+                        <h5>Pedido</h5>
+                    </div>
+                    <div class="col-sm-1">
                         <h5>TOTAL<span class='glyphicon glyphicon-eur'></span></h5>
                     </div>
                     <div class="col-sm-1">
                         <h5>Fecha</h5>
                     </div>
-                    <div class="col-sm-2">
-                        <h5>Enviado</h5>
-                    </div>
                 </div>
             </ul>
             <h4>Compras finalizadas</h4>
             <ul id="comprasFin">
-                <div class="col-sm-12">
+                 <div class="col-sm-12 hidden-xs">
                     <div class="col-sm-2">
                         <h5>Nombre</h5>
                     </div>
-                    <div class="col-sm-1">
-                        <h5>Cantidad</h5>
-                    </div>
-                    <div class="col-sm-1">
-                        <h5>Precio</h5>
+                    <div class="col-sm-2">
+                        <h5>Pedido</h5>
                     </div>
                     <div class="col-sm-2">
-                        <h5>Gastos de envio</h5>
-                    </div>
-                    <div class="col-sm-2">
-                        <h5>TOTAL <span class='glyphicon glyphicon-eur'></span></h5>
+                        <h5>TOTAL<span class='glyphicon glyphicon-eur'></span></h5>
                     </div>
                     <div class="col-sm-1">
                         <h5>Fecha</h5>
@@ -667,12 +683,12 @@
             </ul>
             <h4>Ventas activas</h4>
             <ul id="ventasActivas">
-                <div class="col-sm-12">
+                <div class="col-sm-12 hidden-xs">
                     <div class="col-sm-2">
                         <h5>Nombre</h5>
                     </div>
                     <div class="col-sm-2">
-                        <h5>Direccion</h5>
+                        <h5>Dirección</h5>
                     </div>
                     <div class="col-sm-2">
                         <h5>Pedido</h5>
@@ -688,12 +704,12 @@
             </ul>
             <h4>Ventas finalizadas</h4>
             <ul id="ventasFin">
-                <div class="col-sm-12">
+                <div class="col-sm-12 hidden-xs">
                     <div class="col-sm-2">
                         <h5>Nombre</h5>
                     </div>
                     <div class="col-sm-2">
-                        <h5>Direccion</h5>
+                        <h5>Dirección</h5>
                     </div>
                     <div class="col-sm-2">
                         <h5>Pedido</h5>
